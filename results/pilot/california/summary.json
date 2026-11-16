@@ -1,0 +1,128 @@
+{
+ "rows": [
+  {
+   "K": 3,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 0.49477492474706103,
+   "cv_mae_sd": 0.02404748293368361,
+   "complexity_mean": 17.0,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 250.85355941766466,
+   "distinct_evaluations_mean": 5031.0
+  },
+  {
+   "K": 3,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 0.48234471666307904,
+   "cv_mae_sd": 0.0034511401411279666,
+   "complexity_mean": 19.666666666666668,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 289.9929175050008,
+   "distinct_evaluations_mean": 5822.666666666667
+  },
+  {
+   "K": 3,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 0.49586248659398763,
+   "cv_mae_sd": 0.023078257581017902,
+   "complexity_mean": 20.666666666666668,
+   "n_columns_mean": 6.666666666666667,
+   "seconds_mean": 263.33755398232944,
+   "distinct_evaluations_mean": 5424.333333333333
+  },
+  {
+   "K": 5,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 0.5014149659506492,
+   "cv_mae_sd": 0.019267709381256114,
+   "complexity_mean": 19.333333333333332,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 303.1883881120011,
+   "distinct_evaluations_mean": 6090.666666666667
+  },
+  {
+   "K": 5,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 0.4888104045923039,
+   "cv_mae_sd": 0.008671130029158359,
+   "complexity_mean": 25.0,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 306.01351344899984,
+   "distinct_evaluations_mean": 6135.333333333333
+  },
+  {
+   "K": 5,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 0.5011464347324964,
+   "cv_mae_sd": 0.024141788161391363,
+   "complexity_mean": 30.666666666666668,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 310.41500554266776,
+   "distinct_evaluations_mean": 6432.0
+  },
+  {
+   "K": 7,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 0.49343635228190424,
+   "cv_mae_sd": 0.01847164634798548,
+   "complexity_mean": 17.0,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 283.2929563823297,
+   "distinct_evaluations_mean": 5566.666666666667
+  },
+  {
+   "K": 7,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 0.4804128686695623,
+   "cv_mae_sd": 0.0012159088251048188,
+   "complexity_mean": 24.0,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 220.2741700806655,
+   "distinct_evaluations_mean": 5791.0
+  },
+  {
+   "K": 7,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 0.4872430371237139,
+   "cv_mae_sd": 0.004210539614654505,
+   "complexity_mean": 21.333333333333332,
+   "n_columns_mean": 7.0,
+   "seconds_mean": 183.33897930966972,
+   "distinct_evaluations_mean": 6169.333333333333
+  }
+ ],
+ "epsilon_proposed": 0.0030487185941728548,
+ "epsilon_run_range": [
+  0.0017153389670230346,
+  0.004618040441401671
+ ],
+ "best_raw": {
+  "K": 7,
+  "max_depth": 3
+ },
+ "within_epsilon": [
+  {
+   "K": 3,
+   "max_depth": 3
+  },
+  {
+   "K": 7,
+   "max_depth": 3
+  }
+ ],
+ "proposed": {
+  "K": 3,
+  "max_depth": 3
+ },
+ "executed_now": 27,
+ "dataset": "california"
+}

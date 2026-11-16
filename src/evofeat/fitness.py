@@ -50,14 +50,22 @@ class Fitness:
         self.evaluations = 0  # evaluaciones reales (sin contar aciertos de caché)
         self.cache_hits = 0
 
-    def _mae_cv(self, M: np.ndarray, folds: Folds | None = None) -> float:
-        """MAE medio sobre los folds, ajustando escalado + modelo solo con cada train."""
+    def _fold_maes(self, M: np.ndarray, folds: Folds | None = None) -> list[float]:
+        """MAE de cada fold, ajustando escalado + modelo solo con el train de cada fold."""
         maes = []
         for entrenar, probar in (self.folds if folds is None else folds):
             modelo = make_pipeline(StandardScaler(), self.model_factory())
             modelo.fit(M[entrenar], self.y[entrenar])
             maes.append(float(np.mean(np.abs(self.y[probar] - modelo.predict(M[probar])))))
-        return float(np.mean(maes))
+        return maes
+
+    def _mae_cv(self, M: np.ndarray, folds: Folds | None = None) -> float:
+        """MAE medio sobre los folds (media de los MAE de cada fold)."""
+        return float(np.mean(self._fold_maes(M, folds)))
+
+    def fold_maes(self, ind: Individual, folds: Folds | None = None) -> list[float]:
+        """MAE de cada fold de un individuo (por defecto, los folds de la evolución)."""
+        return self._fold_maes(build_matrix(ind, self.evaluator), folds)
 
     def cv_mae(self, ind: Individual, folds: Folds) -> float:
         """MAE medio en CV con folds distintos de los de la evolución, sin caché (D7)."""

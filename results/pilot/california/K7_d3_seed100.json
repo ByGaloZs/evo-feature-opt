@@ -1,0 +1,39 @@
+{
+ "dataset": "california",
+ "K": 7,
+ "max_depth": 3,
+ "seed": 100,
+ "cv_mae_best": 0.48181650991000935,
+ "evolution_best_fitness": 0.4819271479687755,
+ "cv_fold_maes": [
+  0.48554464163334876,
+  0.48794030944735595,
+  0.4880050497886149,
+  0.4807409619991523,
+  0.4674047769754055
+ ],
+ "epsilon_run": 0.0038632341265830896,
+ "complexity": 14,
+ "n_columns": 7,
+ "kept_originals": [
+  "MedInc",
+  "HouseAge",
+  "AveOccup",
+  "Latitude",
+  "Longitude"
+ ],
+ "formulas": [
+  "(sqrt(|AveOccup|) * sqrt(|AveOccup|))",
+  "log(1 + |AveRooms|)"
+ ],
+ "individuals_generated": 9900,
+ "distinct_evaluations": 4942,
+ "cache_hits": 4958,
+ "seconds_fit": 253.67896556699998,
+ "budget": {
+  "pop_size": 100,
+  "generations": 100,
+  "hof_size": 10,
+  "repeats": 3
+ }
+}

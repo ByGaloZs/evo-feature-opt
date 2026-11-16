@@ -1,0 +1,156 @@
+{
+ "rows": [
+  {
+   "K": 3,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 44.289398435332366,
+   "cv_mae_sd": 0.29192799188824303,
+   "complexity_mean": 20.333333333333332,
+   "n_columns_mean": 8.666666666666666,
+   "seconds_mean": 67.72647785299826,
+   "distinct_evaluations_mean": 6127.666666666667
+  },
+  {
+   "K": 3,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 43.73668644823537,
+   "cv_mae_sd": 0.5431945759921614,
+   "complexity_mean": 25.333333333333332,
+   "n_columns_mean": 8.333333333333334,
+   "seconds_mean": 74.78868547566769,
+   "distinct_evaluations_mean": 6913.666666666667
+  },
+  {
+   "K": 3,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 43.91178615147259,
+   "cv_mae_sd": 0.8907689446928025,
+   "complexity_mean": 29.666666666666668,
+   "n_columns_mean": 7.666666666666667,
+   "seconds_mean": 81.38400292366957,
+   "distinct_evaluations_mean": 7398.333333333333
+  },
+  {
+   "K": 5,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 44.00312728393042,
+   "cv_mae_sd": 0.4020171369797202,
+   "complexity_mean": 26.333333333333332,
+   "n_columns_mean": 8.666666666666666,
+   "seconds_mean": 71.57037001166948,
+   "distinct_evaluations_mean": 6603.333333333333
+  },
+  {
+   "K": 5,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 43.573729947544564,
+   "cv_mae_sd": 0.09885828935442309,
+   "complexity_mean": 38.666666666666664,
+   "n_columns_mean": 8.0,
+   "seconds_mean": 86.55666995900053,
+   "distinct_evaluations_mean": 7647.0
+  },
+  {
+   "K": 5,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 43.74071695510849,
+   "cv_mae_sd": 0.19567537648715513,
+   "complexity_mean": 45.333333333333336,
+   "n_columns_mean": 8.666666666666666,
+   "seconds_mean": 75.85431436300132,
+   "distinct_evaluations_mean": 7347.0
+  },
+  {
+   "K": 7,
+   "max_depth": 2,
+   "runs": 3,
+   "cv_mae_mean": 44.33102328783618,
+   "cv_mae_sd": 0.3019401159044342,
+   "complexity_mean": 26.333333333333332,
+   "n_columns_mean": 8.666666666666666,
+   "seconds_mean": 67.5799358543348,
+   "distinct_evaluations_mean": 6248.666666666667
+  },
+  {
+   "K": 7,
+   "max_depth": 3,
+   "runs": 3,
+   "cv_mae_mean": 43.22658425149359,
+   "cv_mae_sd": 0.6476652630855858,
+   "complexity_mean": 43.666666666666664,
+   "n_columns_mean": 9.0,
+   "seconds_mean": 64.24218630499915,
+   "distinct_evaluations_mean": 7343.0
+  },
+  {
+   "K": 7,
+   "max_depth": 4,
+   "runs": 3,
+   "cv_mae_mean": 44.32072938615553,
+   "cv_mae_sd": 0.4639195432466957,
+   "complexity_mean": 34.333333333333336,
+   "n_columns_mean": 9.0,
+   "seconds_mean": 47.57032585433141,
+   "distinct_evaluations_mean": 6867.0
+  }
+ ],
+ "epsilon_proposed": 1.260085323864235,
+ "epsilon_run_range": [
+  0.47210712870586774,
+  2.2115240041872934
+ ],
+ "best_raw": {
+  "K": 7,
+  "max_depth": 3
+ },
+ "within_epsilon": [
+  {
+   "K": 3,
+   "max_depth": 2
+  },
+  {
+   "K": 3,
+   "max_depth": 3
+  },
+  {
+   "K": 3,
+   "max_depth": 4
+  },
+  {
+   "K": 5,
+   "max_depth": 2
+  },
+  {
+   "K": 5,
+   "max_depth": 3
+  },
+  {
+   "K": 5,
+   "max_depth": 4
+  },
+  {
+   "K": 7,
+   "max_depth": 2
+  },
+  {
+   "K": 7,
+   "max_depth": 3
+  },
+  {
+   "K": 7,
+   "max_depth": 4
+  }
+ ],
+ "proposed": {
+  "K": 3,
+  "max_depth": 2
+ },
+ "executed_now": 27,
+ "dataset": "diabetes"
+}

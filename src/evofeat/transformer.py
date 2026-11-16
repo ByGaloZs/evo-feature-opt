@@ -158,6 +158,8 @@ class EvoFeatureTransformer:
         self.constant_formulas_dropped_: list[str] = []
         self.cv_mae_best_: float = float("nan")  # MAE en CV repetida con folds nuevos (D7)
         self.evolution_best_fitness_: float = float("nan")  # MAE con los folds de la evolución
+        self.cv_fold_maes_: list[float] = []  # MAE por fold del ganador (folds de la evolución)
+        self.complexity_: int = 0  # columnas + nodos efectivos del ganador (D17)
         self.individuals_generated_: int = 0
         self.distinct_evaluations_: int = 0
         self.cache_hits_: int = 0
@@ -241,6 +243,8 @@ class EvoFeatureTransformer:
         self._estado = _Estado(names, ganador.mask.copy(), efectivas)
         self._registrar_fenotipo(names)
         self.constant_formulas_dropped_ = [to_infix(f, names) for f in dropped_constants(ganador, ev)]
+        self.cv_fold_maes_ = fit_fn.fold_maes(ganador)
+        self.complexity_ = complexity(ganador, ev)
         return self
 
     def _registrar_fenotipo(self, names: list[str]) -> None:

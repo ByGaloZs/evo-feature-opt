@@ -1,0 +1,41 @@
+{
+ "dataset": "diabetes",
+ "K": 5,
+ "max_depth": 4,
+ "seed": 101,
+ "cv_mae_best": 43.545781751169365,
+ "evolution_best_fitness": 43.32474528553551,
+ "cv_fold_maes": [
+  47.786598541277414,
+  46.17976976484065,
+  43.23338934515969,
+  41.1788957979584,
+  38.24507297844144
+ ],
+ "epsilon_run": 1.70990330036294,
+ "complexity": 57,
+ "n_columns": 9,
+ "kept_originals": [
+  "sex",
+  "bmi",
+  "bp",
+  "s3",
+  "s6"
+ ],
+ "formulas": [
+  "((log(1 + |log(1 + |s4|)|) - (log(1 + |s4|) - sex)) * (((bmi + age) + age) + sex))",
+  "sqrt(|age|)",
+  "((log(1 + |s6|) + s5) + (sqrt(|s6|) + (log(1 + |s6|) + s5)))",
+  "((((sex / sex) + (s5 * s2)) + ((sex / s6) + (s5 * s2))) - sqrt(|sex|))"
+ ],
+ "individuals_generated": 9900,
+ "distinct_evaluations": 8376,
+ "cache_hits": 1524,
+ "seconds_fit": 91.62447023099958,
+ "budget": {
+  "pop_size": 100,
+  "generations": 100,
+  "hof_size": 10,
+  "repeats": 3
+ }
+}
