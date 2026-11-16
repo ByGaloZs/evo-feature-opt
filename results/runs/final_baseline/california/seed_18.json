@@ -1,0 +1,61 @@
+{
+ "meta": {
+  "experiment": "final_baseline",
+  "dataset": "california",
+  "configuration": "baseline",
+  "epsilon": 0.003,
+  "representation": "tree",
+  "seed": 18,
+  "config_hash": "ee68694fbf9f448f19f8462faf0d4b2cc1029759a520abcd4f88629aaca2c5ea",
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-43-generic-x86_64-with-glibc2.39",
+  "libraries": {
+   "numpy": "2.5.5",
+   "scipy": "1.18.1",
+   "scikit-learn": "1.9.1"
+  },
+  "date": "2026-11-16T23:41:37+00:00"
+ },
+ "baseline_mae": 0.5218760217858747,
+ "mae": 0.5218760217858748,
+ "relative_improvement": -2.1273692951554693e-16,
+ "cv_mae_best": 0.5359466679131172,
+ "evolution_best_fitness": null,
+ "n_columns": 8,
+ "n_originals_kept": 8,
+ "n_synthesized": 0,
+ "kept_originals": [
+  "MedInc",
+  "HouseAge",
+  "AveRooms",
+  "AveBedrms",
+  "Population",
+  "AveOccup",
+  "Latitude",
+  "Longitude"
+ ],
+ "formulas": [],
+ "constant_formulas_dropped": [],
+ "secondary": {
+  "ridge": {
+   "baseline_mae": 0.5218713776432437,
+   "mae": 0.5218713776432433
+  },
+  "knn": {
+   "baseline_mae": 0.42601996753875965,
+   "mae": 0.42601996753875965
+  },
+  "rf": {
+   "baseline_mae": 0.33041455686773286,
+   "mae": 0.33041455686773286
+  }
+ },
+ "history": [],
+ "hall_of_fame": [],
+ "individuals_generated": 0,
+ "distinct_evaluations": 0,
+ "evaluations": 0,
+ "cache_hits": 0,
+ "seconds_fit": 0.1796772809975664,
+ "seconds": 32.31516283399833
+}
