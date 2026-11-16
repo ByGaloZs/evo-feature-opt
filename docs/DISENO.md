@@ -191,7 +191,7 @@ El fitness es el MAE medio de M en la CV interna (a minimizar); entre individuos
 - *Descartado:* multiobjetivo con NSGA-II. Da un frente de Pareto error/complejidad muy vistoso, pero añade un algoritmo nuevo que no está en las presentaciones.
 - Valor de ε: **Pendiente** del piloto. Propuesta: la desviación típica del MAE entre folds dividida por √5; diferencias menores que eso son ruido de la CV.
 
-**D18 — Caché de fitness por fenotipo.** Antes de evaluar, se calcula una huella de las fórmulas expresadas y la máscara; si ya se evaluó, se reutiliza.
+**D18 — Caché de fitness por fenotipo.** Antes de evaluar, se calcula una huella de las fórmulas expresadas y la máscara; si ya se evaluó, se reutiliza. La huella no depende del orden: es el conjunto ordenado de fórmulas activas más la máscara, no la secuencia de genes.
 
 - *Por qué:* muchos individuos distintos expresan la misma fórmula (la selección duplica individuos y, en GEP, la parte final del gen no siempre se usa), así que la caché ahorra muchas evaluaciones y no cambia ningún resultado.
 
@@ -223,7 +223,10 @@ Algoritmo generacional con elitismo, selección por torneo y operadores de PG co
   - *Por qué:* control total y cada pieza se puede explicar en la defensa. Además, GEP se decodifica a la misma representación de árbol que usa la PG (§15), así que evaluación, impresión de fórmulas y caché son el mismo código para ambas: la comparación de D25 es justa por construcción.
   - *Coste aceptado:* más código propio y más riesgo de errores sutiles. Se compensa con tests por hito (§15.6), incluido un problema sintético con solución conocida.
   - *Descartado:* el módulo de PG de DEAP (menos código, pero la comparación con un GEP propio mezclaría dos implementaciones distintas).
-- *Variante GEP (solo para D25):* h = 7, así que t = 8 y cada gen tiene 15 símbolos, como mucho 15 nodos, igual que un árbol de profundidad 3. Operadores y tasas por defecto de GEP (Ferreira): mutación 0,044 por símbolo, transposiciones IS, RIS y de gen 0,1 cada una, recombinación de 1 punto, 2 puntos y de genes 0,3 / 0,3 / 0,1.
+- *Variante GEP (solo para D25):* h = 7, así que t = 8 y cada gen tiene 15 símbolos, como mucho 15 nodos, igual que un árbol de profundidad 3. Operadores y tasas por defecto de GEP (Ferreira): mutación 0,044 por símbolo, transposiciones IS y RIS 0,1 cada una, recombinación de 1 punto, 2 puntos y de genes 0,3 / 0,3 / 0,1. No hay transposición de gen: OLS no depende del orden de las columnas, así que permutar genes no cambia nunca el fitness.
+- *Tasas por representación:* los árboles usan `p_crossover` y `p_mutation`; GEP usa las tasas de Ferreira, aplicadas cada una de forma independiente y definidas en una sección `[gep]` del TOML. Selección, elitismo, operadores de máscara e interruptores, fitness y presupuesto son idénticos en ambas.
+- *Gen e interruptor son una unidad:* en el intercambio de árboles completos y en la recombinación de genes, el interruptor k viaja con el gen k. Los interruptores mutan por inversión de bit, igual que la máscara.
+- *Precisiones de GEP:* en IS y RIS, lo que el fragmento desplaza fuera de la cabeza se pierde y la cola no se toca; si RIS no encuentra ninguna función no hace nada; la posición 0 de la cabeza solo admite funciones y la cola solo terminales. Los fragmentos miden de 1 a 3 símbolos, IS inserta en la cabeza (nunca en la raíz) y RIS parte de una función de la cabeza.
 
 ## 9. Diseño experimental
 
@@ -284,7 +287,7 @@ Cada requisito sale de una decisión anterior; si una decisión cambia, sabemos 
 | RF-03 | Exponer P como transformador con `fit(Xt, yt)` y `transform(X)` | D9 |
 | RF-04 | Evaluar los árboles (y, en la variante GEP, decodificar los genes Karva) de forma vectorizada con NumPy, con operaciones protegidas | D14, D15 |
 | RF-05 | Calcular el fitness con 5-fold CV de folds fijos y un pipeline escalado + M por fold | D6, D8, D16 |
-| RF-06 | Implementar los operadores de árboles del §8 y, para la variante GEP, mutación, transposiciones y recombinaciones respetando cabeza/cola; en ambas, los operadores de máscara e interruptores, y la reparación de D24 | D13, §8 |
+| RF-06 | Implementar los operadores de árboles del §8 y, para la variante GEP, mutación, transposiciones IS y RIS y recombinaciones respetando cabeza/cola (sin transposición de gen); en ambas, los operadores de máscara e interruptores, y la reparación de D24 | D13, §8 |
 | RF-07 | Torneo con parsimonia lexicográfica y caché de fitness por fenotipo | D17, D18 |
 | RF-08 | Guardar el hall of fame y re-seleccionar el ganador con CV repetida en folds nuevos | D7 |
 | RF-09 | Calcular e y e′ con M y con los modelos secundarios | D10, D11 |
@@ -476,6 +479,16 @@ elitism = 2
 p_crossover = 0.8
 p_mutation = 0.2
 max_columns = "n-1"           # D24
+# p_crossover y p_mutation solo los usa la representación en árbol
+
+[gep]                         # solo representation = "gep"; tasas de Ferreira, independientes (§8)
+p_point = 0.044               # mutación puntual, por símbolo
+p_is = 0.1
+p_ris = 0.1
+p_one_point = 0.3
+p_two_point = 0.3
+p_gene_recombination = 0.1    # intercambio de genes (con su interruptor), en evolution.py
+transposon_max_len = 3
 
 [fitness]
 model = "ols"

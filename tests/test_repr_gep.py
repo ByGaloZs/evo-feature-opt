@@ -118,6 +118,40 @@ def test_estres_mutacion_y_recombinacion_conservan_estructura():
             pob[int(rng.integers(40))] = h
 
 
+def test_cada_operador_10000_veces_conserva_funcion_en_raiz_y_cola_de_terminales():
+    """Todo gen tiene una función en la posición 0 y la cola solo con terminales."""
+    rep, rng = _rep(), np.random.default_rng(15)
+    genes = [rep.random_genome(rng) for _ in range(50)]
+    unarios = {
+        "point": rep.point_mutation,
+        "is": rep.is_transposition,
+        "ris": rep.ris_transposition,
+        "mutate": rep.mutate,
+    }
+    binarios = {
+        "one_point": rep.one_point_recombination,
+        "two_point": rep.two_point_recombination,
+        "crossover": rep.crossover,
+    }
+    for nombre, op in unarios.items():
+        for _ in range(10_000):
+            h = op(genes[int(rng.integers(50))], rng)
+            assert _gen_valido(rep, h), (nombre, h)
+    for nombre, op in binarios.items():
+        for _ in range(5_000):  # cada llamada produce dos hijos: 10 000 genes
+            h1, h2 = op(genes[int(rng.integers(50))], genes[int(rng.integers(50))], rng)
+            assert _gen_valido(rep, h1) and _gen_valido(rep, h2), (nombre, h1, h2)
+
+
+def test_is_y_ris_pierden_lo_desplazado_y_no_tocan_la_cola():
+    rep = GepRepresentation(2, 4, ("add", "mul"), transposon_max_len=2)
+    g = ("add", "x0", "mul", "x1", "x0", "x1", "x0", "x1", "x0")  # h=4, t=5
+    rng = np.random.default_rng(16)
+    for _ in range(300):
+        for h in (rep.is_transposition(g, rng), rep.ris_transposition(g, rng)):
+            assert len(h) == len(g) and h[4:] == g[4:]
+
+
 def test_mutacion_puntual_tasa_y_cola_solo_terminales():
     rep = GepRepresentation(N, H, FUNCTION_NAMES, p_point=1.0)  # muta todos los símbolos
     rng = np.random.default_rng(4)

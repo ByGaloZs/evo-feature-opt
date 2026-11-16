@@ -13,7 +13,13 @@ evolution.py (§15.2). Todos los operadores respetan cabeza/cola.
 Regla igual que en árboles (D25): la primera posición de la cabeza es siempre una
 función, al inicializar y al mutar; así ningún gen es un original sin más.
 
-Decisiones de detalle no fijadas por el diseño (confirmables):
+No hay transposición de gen: OLS no depende del orden de las columnas (§8). Las tasas
+de esta clase se leen de la sección ``[gep]`` del TOML; los árboles usan ``p_crossover``
+y ``p_mutation``.
+
+Decisiones de detalle confirmadas por el usuario:
+- Lo que el fragmento de IS o RIS desplaza fuera de la cabeza se pierde; la cola no se toca.
+- Si RIS no encuentra ninguna función, no hace nada.
 - Longitud de los fragmentos de IS y RIS: uniforme en 1..3 (valores típicos de Ferreira).
 - IS inserta en una posición de la cabeza distinta de la raíz; RIS parte de una función
   de la cabeza (se busca hacia delante desde un punto aleatorio) y se inserta en la raíz.
