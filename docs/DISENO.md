@@ -146,7 +146,7 @@ Un único individuo codifica a la vez qué originales se quedan (máscara binari
 | Árboles | K árboles, profundidad máxima 3 (≤ 15 nodos cada uno) | Un atributo sintetizado por árbol |
 | Interruptores de árboles | K bits | Qué atributos sintetizados pasan a Xt′ |
 
-- Valores de partida: **K = 5, profundidad máxima 3** (la raíz es profundidad 0). Los definitivos se eligen en el piloto (D20) con una rejilla K ∈ {3, 5, 7} × profundidad ∈ {2, 3, 4}.
+- Valores de partida: **K = 5, profundidad máxima 3** (la raíz es profundidad 0). Los definitivos se eligen en el piloto (D20) con una rejilla K ∈ {3, 5, 7} × profundidad ∈ {2, 3, 4}. **Valores finales (piloto, D20): K = 3 y profundidad máxima 3 en ambos datasets.**
 - *Por qué profundidad 3 de partida:* con operaciones binarias da como mucho 15 nodos. Profundidad 2 (7 nodos) no admite una transformación de una interacción dividida por otro atributo, como log(1+|x₁·x₂|)/x₃, que es el tipo de atributo que esperamos útil. Profundidad 4 (31 nodos) o más multiplica el espacio de búsqueda, aumenta el riesgo de sobreajuste con las ≈ 350 filas de train de Diabetes y produce fórmulas que no se pueden explicar. La profundidad 17 de Koza es para PG general, no para construir atributos.
 - *Por qué K = 5 de partida:* con la restricción de D24, Xt′ tiene como mucho n − 1 columnas (7 en California, 9 en Diabetes), así que K > n − 1 nunca se podría usar entero. K = 5 deja sitio para 5 atributos nuevos y al menos 2 originales en California. Más árboles agrandan el individuo y añaden colinealidad; menos impedirían usar más atributos nuevos aunque convenga. Con los interruptores la evolución puede usar menos de K, así que es preferible que K sobre a que falte.
 - *Por qué interruptores por árbol:* el número de atributos nuevos también se optimiza, entre 0 y K, en vez de forzar siempre K.
@@ -190,7 +190,7 @@ El fitness es el MAE medio de M en la CV interna (a minimizar); entre individuos
 - *Por qué:* evita sobreajustar con atributos que bajan el error de forma insignificante, y da fórmulas más legibles para el póster.
 - *Por qué lexicográfica y no una penalización MAE + λ·complejidad:* no obliga a mezclar unidades distintas ni a calibrar λ para cada dataset.
 - *Descartado:* multiobjetivo con NSGA-II. Da un frente de Pareto error/complejidad muy vistoso, pero añade un algoritmo nuevo que no está en las presentaciones.
-- Valor de ε: **Pendiente** del piloto. Propuesta: la desviación típica del MAE entre folds dividida por √5; diferencias menores que eso son ruido de la CV.
+- Valor de ε: lo fija el piloto (D20) por dataset, porque depende de la escala del objetivo: **Diabetes 1,26 y California 0,0030**. Se calcula como la mediana, sobre las ejecuciones del piloto, de la desviación típica del MAE entre los 5 folds del ganador dividida por √5; diferencias menores que eso son ruido de la CV.
 
 **D18 — Caché de fitness por fenotipo.** Antes de evaluar, se calcula una huella de las fórmulas expresadas y la máscara; si ya se evaluó, se reutiliza. La huella no depende del orden: es el conjunto ordenado de fórmulas activas más la máscara, no la secuencia de genes. *(decisión de implementación, hito 5)*
 
@@ -245,7 +245,11 @@ Cuatro configuraciones por dataset más la variante GEP de C, 30 semillas cada u
 
 **D19 — Ablación A / B / C.** *Por qué:* si C mejora, la ablación dice de dónde viene la mejora. Sin ella, el análisis de la memoria se queda en «funciona» o «no funciona».
 
-**D20 — Piloto antes de los experimentos.** Rejilla K ∈ {3, 5, 7} × profundidad máxima ∈ {2, 3, 4} (9 combinaciones), 3 semillas cada una, configuración C, usando **solo la CV sobre train**. Gana la combinación con mejor MAE en CV; si varias quedan dentro de ε (D17), la de menor K y profundidad. El piloto también fija ε y mide los tiempos.
+**D20 — Piloto antes de los experimentos.** Rejilla K ∈ {3, 5, 7} × profundidad máxima ∈ {2, 3, 4} (9 combinaciones), 3 semillas cada una, configuración C, usando **solo la CV sobre train**. Regla original: gana la combinación con mejor MAE en CV; si varias quedan dentro de ε (D17), la de menor K y profundidad. El piloto también fija ε y mide los tiempos.
+
+- **Decisión tras el piloto (sustituye a la regla original; se decidió después de ver los resultados del piloto, que solo usa train, así que no hay fuga):** se elige la combinación **más pequeña que queda dentro de ε de la mejor en TODOS los datasets**; desempate por menor K y, a igualdad, menor profundidad. Resultado: **K = 3 y profundidad máxima 3 para ambos datasets (GEP: h = 7)**. En Diabetes las 9 combinaciones quedan dentro de ε, así que el piloto no discrimina y cualquier combinación está igual de respaldada por los datos; en California solo (3, 3) y (7, 3) quedan dentro de ε y la profundidad 3 es la mejor con los tres K. *Por qué comunes:* si Diabetes no aporta información, no se introduce una diferencia arbitraria entre datasets; con una sola configuración los resultados se comparan sin ese factor de confusión y GEP usa el mismo h en ambos.
+- **ε por dataset** (depende de la escala del objetivo; mediana de la desviación típica de los 5 folds dividida por √5 sobre las 27 ejecuciones del piloto): **Diabetes 1,26 y California 0,0030**.
+- **Comprobación de ε > 0 (hito 8b):** antes de lanzar los experimentos se ejecuta C con K = 3 y profundidad 3 y el ε final, con las semillas del piloto (100–102) y solo con train, y se compara con ε = 0. Criterio: si el MAE en CV repetida con folds nuevos empeora más de ε, se para.
 
 - *Por qué una rejilla:* convierte K y la profundidad en valores elegidos con datos en lugar de por criterio, y en la memoria se puede decir cómo se eligieron.
 - *Por qué solo con la CV sobre train:* ajustar parámetros mirando validación también es una fuga, aunque sea indirecta.
@@ -343,8 +347,8 @@ Nada de código hasta cerrar las cinco primeras; las dos últimas se cierran con
 
 - [ ] D1 — Confirmar si los CSV traen la partición hecha y qué columna es y (lo comprueba el hito 1 del §15.6)
 - [ ] D23 — Incluir o no el estudio de robustez a la partición
-- [ ] D13 — Valores finales de K y profundidad máxima (los elige el piloto, D20)
-- [ ] D17 — Valor final de ε (lo fija el piloto, D20)
+- [x] D13 — Valores finales de K y profundidad máxima: K = 3 y profundidad 3 (piloto, D20)
+- [x] D17 — Valor final de ε: Diabetes 1,26 y California 0,0030 (piloto, D20)
 
 Ya decidido: D10 (OLS), D12 (PG multiárbol + máscara), D24 (Xt′ con menos columnas que X), D25 (comparación con GEP) e implementación propia con NumPy (§8).
 
@@ -471,8 +475,8 @@ representation = "tree"       # tree | gep            (D25)
 seeds = { start = 0, count = 30 }
 
 [representation]
-K = 5                         # D13, lo fija el piloto
-max_depth = 3                 # D13, lo fija el piloto
+K = 3                         # D13, fijado por el piloto (común a ambos datasets)
+max_depth = 3                 # D13, fijado por el piloto (común a ambos datasets)
 gep_head = 7                  # se deduce de max_depth (D20)
 functions = ["add", "sub", "mul", "div", "sqrt", "log"]
 
@@ -498,12 +502,18 @@ transposon_max_len = 3
 [fitness]
 model = "ols"
 cv_folds = 5
-epsilon = 0.0                 # D17, valor fijado por el piloto
+epsilon = 0.0                 # D17, ε por defecto; se sustituye por el de cada dataset (abajo)
 max_cached_values = 1000      # caché LRU de vectores de fórmulas (≈ 130 MB en California); solo afecta al tiempo y la memoria
 
 [final_selection]
 hof_size = 10
 repeats = 3                   # 3 × 5-fold con folds nuevos (D7)
+
+[datasets.diabetes]           # ε por dataset: depende de la escala del objetivo (D17, piloto)
+epsilon = 1.26
+
+[datasets.california]
+epsilon = 0.0030
 ```
 
 ### 15.4 Registro de cada ejecución

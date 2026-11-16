@@ -1,0 +1,47 @@
+{
+ "dataset": "california",
+ "K": 3,
+ "max_depth": 3,
+ "epsilon": 0.003,
+ "seeds": [
+  100,
+  101,
+  102
+ ],
+ "epsilon_zero": {
+  "cv_mae_mean": 0.48234471666307904,
+  "complexity_mean": 19.666666666666668,
+  "n_columns_mean": 7.0,
+  "seconds_mean": 289.9929175050008,
+  "distinct_evaluations_mean": 5822.666666666667
+ },
+ "epsilon_final": {
+  "cv_mae_mean": 0.48523135232078535,
+  "complexity_mean": 18.333333333333332,
+  "n_columns_mean": 7.0,
+  "seconds_mean": 124.5182503883334,
+  "distinct_evaluations_mean": 5011.666666666667
+ },
+ "per_seed_cv_mae": {
+  "epsilon_zero": [
+   0.4796241247105945,
+   0.4862267487168604,
+   0.48118327656178234
+  ],
+  "epsilon_final": [
+   0.4811420682200425,
+   0.48180315616738273,
+   0.4927488325749308
+  ]
+ },
+ "difference_cv_mae": 0.0028866356577063046,
+ "baseline_cv": {
+  "per_seed": [
+   0.5360648830638726,
+   0.5360230376621352,
+   0.5364229230368153
+  ],
+  "mean": 0.5361702812542744
+ },
+ "stop": false
+}

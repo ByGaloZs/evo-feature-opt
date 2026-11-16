@@ -1,0 +1,47 @@
+{
+ "dataset": "diabetes",
+ "K": 3,
+ "max_depth": 3,
+ "epsilon": 1.26,
+ "seeds": [
+  100,
+  101,
+  102
+ ],
+ "epsilon_zero": {
+  "cv_mae_mean": 43.73668644823537,
+  "complexity_mean": 25.333333333333332,
+  "n_columns_mean": 8.333333333333334,
+  "seconds_mean": 74.78868547566769,
+  "distinct_evaluations_mean": 6913.666666666667
+ },
+ "epsilon_final": {
+  "cv_mae_mean": 44.42945488492099,
+  "complexity_mean": 21.333333333333332,
+  "n_columns_mean": 8.0,
+  "seconds_mean": 18.29040616333562,
+  "distinct_evaluations_mean": 3990.6666666666665
+ },
+ "per_seed_cv_mae": {
+  "epsilon_zero": [
+   43.514289397735716,
+   44.35578753435106,
+   43.33998241261935
+  ],
+  "epsilon_final": [
+   43.65852305417193,
+   44.87944636064571,
+   44.75039523994534
+  ]
+ },
+ "difference_cv_mae": 0.6927684366856255,
+ "baseline_cv": {
+  "per_seed": [
+   46.22852066076202,
+   46.046228868533255,
+   45.942795880661144
+  ],
+  "mean": 46.072515136652136
+ },
+ "stop": false
+}

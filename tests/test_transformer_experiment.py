@@ -62,6 +62,12 @@ epsilon = 0.01
 [final_selection]
 hof_size = 7
 repeats = 2
+
+[datasets.diabetes]
+epsilon = 1.26
+
+[datasets.california]
+epsilon = 0.0030
 """
 
 
@@ -74,6 +80,10 @@ def test_config_desde_toml(tmp_path):
     assert c.functions == ("add", "mul", "sqrt") and c.datasets == ("diabetes",)
     assert (c.pop_size, c.generations, c.p_point, c.epsilon, c.hof_size, c.repeats) == (50, 10, 0.05, 0.01, 7, 2)
     assert c.head == 3  # gep_head deducido de max_depth = 2 (D20)
+    # ε por dataset (D17): depende de la escala del objetivo
+    assert c.epsilon_for("diabetes") == 1.26 and c.epsilon_for("california") == 0.003
+    assert c.for_dataset("diabetes").epsilon == 1.26 and c.epsilon == 0.01  # el original no cambia
+    assert c.epsilon_for("otro") == 0.01  # sin sección propia, usa el ε por defecto
     assert len(config_hash(ruta)) == 64
 
 
@@ -90,6 +100,8 @@ def test_config_rechaza_claves_y_valores_desconocidos():
         RunConfig.from_dict({"otra": {}})
     with pytest.raises(ValueError):
         RunConfig.from_dict({"evolution": {"max_columns": "n"}})
+    with pytest.raises(ValueError):
+        RunConfig.from_dict({"datasets": {"diabetes": {"epsilon": 1.0, "K": 3}}})
     with pytest.raises(ValueError):
         RunConfig(configuration="Z")
     with pytest.raises(ValueError):
@@ -215,6 +227,7 @@ def test_ejecucion_completa_en_diabetes_con_presupuesto_pequeno(tmp_path):
     assert {"experiment", "dataset", "configuration", "representation", "seed", "config_hash",
             "python", "libraries", "date"} <= set(reg["meta"])
     assert reg["meta"]["dataset"] == "diabetes" and reg["meta"]["config_hash"] == "abc"
+    assert reg["meta"]["epsilon"] == 0.0
     assert set(reg["secondary"]) == {"ridge", "knn", "rf"}
     for v in reg["secondary"].values():
         assert np.isfinite(v["baseline_mae"]) and np.isfinite(v["mae"])
@@ -227,6 +240,11 @@ def test_ejecucion_completa_en_diabetes_con_presupuesto_pequeno(tmp_path):
     assert reg["distinct_evaluations"] + reg["cache_hits"] == reg["individuals_generated"]
     assert len(reg["history"]) == 4 and reg["seconds"] >= reg["seconds_fit"] > 0
     json.dumps(reg, allow_nan=False)  # serializable sin NaN
+
+
+def test_experimento_usa_el_epsilon_del_dataset():
+    cfg = _cfg(name="eps", epsilon_by_dataset={"diabetes": 1.26})
+    assert run_one(cfg, "diabetes", seed=0)["meta"]["epsilon"] == 1.26
 
 
 def test_guardado_atomico_y_no_repite(tmp_path):

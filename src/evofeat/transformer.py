@@ -19,7 +19,7 @@ La configuración ``baseline`` no evoluciona: devuelve los originales (imputados
 from __future__ import annotations
 
 import tomllib
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, field, fields, replace
 from typing import Any
 
 import numpy as np
@@ -80,11 +80,13 @@ class RunConfig:
     # [fitness]
     model: str = "ols"
     cv_folds: int = 5
-    epsilon: float = 0.0
+    epsilon: float = 0.0  # ε por defecto; ``epsilon_by_dataset`` lo sustituye por dataset (D17)
     max_cached_values: int = 1000
     # [final_selection]
     hof_size: int = 10
     repeats: int = 3
+    # [datasets.<nombre>] epsilon = ...  (ε depende de la escala del objetivo)
+    epsilon_by_dataset: dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.configuration not in CONFIGURACIONES_VALIDAS:
@@ -97,19 +99,33 @@ class RunConfig:
         """Longitud de la cabeza de GEP (h), deducida de la profundidad si no se fija (D20)."""
         return self.gep_head if self.gep_head is not None else 2**self.max_depth - 1
 
+    def epsilon_for(self, dataset: str) -> float:
+        """ε de la parsimonia lexicográfica para un dataset (D17)."""
+        return float(self.epsilon_by_dataset.get(dataset, self.epsilon))
+
+    def for_dataset(self, dataset: str) -> RunConfig:
+        """Copia de la configuración con el ε propio del dataset."""
+        return replace(self, epsilon=self.epsilon_for(dataset))
+
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> RunConfig:
         """Construye la configuración desde un diccionario con las secciones del TOML.
 
         Falla ante secciones o claves desconocidas (evita typos que cambien resultados).
         """
-        secciones = {"experiment", "representation", "evolution", "gep", "fitness", "final_selection"}
+        secciones = {"experiment", "representation", "evolution", "gep", "fitness", "final_selection", "datasets"}
         sobran = set(d) - secciones
         if sobran:
             raise ValueError(f"secciones desconocidas en la configuración: {sorted(sobran)}")
         validos = {f.name for f in fields(cls)}
         plano: dict[str, Any] = {}
+        for nombre, opciones in d.get("datasets", {}).items():
+            if set(opciones) != {"epsilon"}:
+                raise ValueError(f"[datasets.{nombre}] solo admite 'epsilon'")
+            plano.setdefault("epsilon_by_dataset", {})[nombre] = float(opciones["epsilon"])
         for seccion, claves in d.items():
+            if seccion == "datasets":
+                continue
             for clave, valor in claves.items():
                 if seccion == "experiment" and clave == "seeds":
                     plano["seed_start"], plano["seed_count"] = int(valor["start"]), int(valor["count"])

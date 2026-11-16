@@ -104,3 +104,61 @@ def test_tabla_contiene_la_propuesta():
     regs = [_reg(K, d, 1.0 + 0.1 * (K + d)) for K in (3, 5, 7) for d in (2, 3, 4)]
     texto = pilot.tabla(pilot.resumir(regs), "diabetes")
     assert "| 3 | 2 |" in texto and "Propuesta" in texto and "ε propuesto" in texto
+
+
+# --- baseline, regla común, comprobación de ε (hito 8b) -----------------------------------------
+
+def test_baseline_cv_usa_ols_con_todos_los_originales_y_los_folds_repetidos():
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import KFold
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    tr = data.load_train("diabetes")
+    b = pilot.baseline_cv("diabetes", seeds=(100,))
+    maes = []
+    for r in range(3):  # 3 repeticiones, random_state = semilla + 10 000 + r (D7)
+        for entrenar, probar in KFold(5, shuffle=True, random_state=100 + 10_000 + r).split(tr.X):
+            m = make_pipeline(StandardScaler(), LinearRegression()).fit(tr.X[entrenar], tr.y[entrenar])
+            maes.append(np.mean(np.abs(tr.y[probar] - m.predict(tr.X[probar]))))
+    assert b["mean"] == pytest.approx(np.mean(maes), rel=1e-10) and len(b["per_seed"]) == 1
+
+
+def test_el_resumen_incluye_la_mejora_frente_al_baseline():
+    regs = [_reg(K, d, 1.0 + 0.1 * (K + d)) for K in (3, 5, 7) for d in (2, 3, 4)]
+    res = pilot.resumir(regs, {"per_seed": [2.0], "mean": 2.0})
+    assert res["baseline_cv"]["mean"] == 2.0
+    assert res["rows"][0]["vs_baseline_relative"] == pytest.approx((2.0 - res["rows"][0]["cv_mae_mean"]) / 2.0)
+    assert "vs baseline" in pilot.tabla(res, "x") and "Baseline" in pilot.tabla(res, "x")
+
+
+def test_regla_comun_interseccion_de_los_datasets():
+    a = {"within_epsilon": [{"K": K, "max_depth": d} for K in (3, 5, 7) for d in (2, 3, 4)]}  # todo empata
+    b = {"within_epsilon": [{"K": 3, "max_depth": 3}, {"K": 7, "max_depth": 3}]}
+    r = pilot.proponer_comun({"diabetes": a, "california": b})
+    assert r["proposed"] == {"K": 3, "max_depth": 3}
+    assert r["valid"] == [{"K": 3, "max_depth": 3}, {"K": 7, "max_depth": 3}]
+    vacia = pilot.proponer_comun({"a": {"within_epsilon": [{"K": 3, "max_depth": 2}]},
+                                  "b": {"within_epsilon": [{"K": 7, "max_depth": 4}]}})
+    assert vacia["proposed"] is None
+
+
+def test_comprobacion_de_epsilon_con_presupuesto_pequeno(tmp_path):
+    res = pilot.comprobar_epsilon("diabetes", 1.26, tmp_path, jobs=1, seeds=(100, 101), **PEQUENO)
+    assert (tmp_path / "diabetes" / "eps_check.json").exists()
+    assert res["K"] == 3 and res["max_depth"] == 3 and res["epsilon"] == 1.26
+    # ε = 0 (pilot) y ε final en archivos distintos, y ε llega al transformador
+    cero = json.loads((tmp_path / "diabetes" / "K3_d3_seed100.json").read_text())
+    final = json.loads((tmp_path / "diabetes" / "K3_d3_eps_seed100.json").read_text())
+    assert cero["epsilon"] == 0.0 and final["epsilon"] == 1.26
+    assert res["difference_cv_mae"] == pytest.approx(
+        res["epsilon_final"]["cv_mae_mean"] - res["epsilon_zero"]["cv_mae_mean"])
+    assert res["stop"] == (res["difference_cv_mae"] > 1.26)
+    assert "CRITERIO" in pilot.tabla_epsilon(res)
+    # relanzar no repite
+    again = pilot.comprobar_epsilon("diabetes", 1.26, tmp_path, jobs=1, seeds=(100, 101), **PEQUENO)
+    assert again["epsilon_final"] == res["epsilon_final"]
+
+
+def test_nucleos_fisicos_razonable():
+    assert 1 <= pilot.nucleos_fisicos() <= 256

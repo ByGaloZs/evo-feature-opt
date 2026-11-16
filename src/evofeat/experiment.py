@@ -60,6 +60,7 @@ def _meta(cfg: RunConfig, dataset: str, seed: int, hash_toml: str) -> dict[str, 
         "experiment": cfg.name,
         "dataset": dataset,
         "configuration": cfg.configuration,
+        "epsilon": cfg.epsilon,
         "representation": cfg.representation,
         "seed": seed,
         "config_hash": hash_toml,
@@ -73,6 +74,7 @@ def _meta(cfg: RunConfig, dataset: str, seed: int, hash_toml: str) -> dict[str, 
 def run_one(cfg: RunConfig, dataset: str, seed: int, hash_toml: str = "") -> dict[str, Any]:
     """Ejecuta una semilla de un dataset y devuelve el registro (§15.4)."""
     t0 = time.perf_counter()
+    cfg = cfg.for_dataset(dataset)  # ε propio del dataset (D17)
     tr = data.load_train(dataset)
     tf = EvoFeatureTransformer(cfg, seed).fit(tr.X, tr.y, feature_names=tr.nombres)
     t_fit = time.perf_counter() - t0
