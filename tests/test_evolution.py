@@ -44,6 +44,7 @@ def _correr(X, y, rep, configuracion="C", seed=0, max_cached=1000, **kw):
 
 # --- criterios de aceptación ------------------------------------------------------------
 
+@pytest.mark.slow
 def test_problema_sintetico_C_encuentra_la_interaccion_en_8_de_10_semillas(sintetico):
     """y = x0·x1: la mejor solución reproduce x0·x1 (R² ≥ 0,99 sobre las columnas de Xt′)."""
     X, y = sintetico
@@ -79,6 +80,7 @@ def test_misma_semilla_mismo_resultado(sintetico, rep_fn):
     assert a.history != c.history
 
 
+@pytest.mark.slow
 def test_el_tamano_de_la_cache_lru_solo_afecta_al_tiempo(sintetico):
     """Misma semilla con LRU de tamaño 1 y de 1000: resultados exactamente iguales."""
     X, y = sintetico

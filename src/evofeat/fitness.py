@@ -50,14 +50,21 @@ class Fitness:
         self.evaluations = 0  # evaluaciones reales (sin contar aciertos de caché)
         self.cache_hits = 0
 
-    def _mae_cv(self, M: np.ndarray) -> float:
+    def _mae_cv(self, M: np.ndarray, folds: Folds | None = None) -> float:
         """MAE medio sobre los folds, ajustando escalado + modelo solo con cada train."""
         maes = []
-        for entrenar, probar in self.folds:
+        for entrenar, probar in (self.folds if folds is None else folds):
             modelo = make_pipeline(StandardScaler(), self.model_factory())
             modelo.fit(M[entrenar], self.y[entrenar])
             maes.append(float(np.mean(np.abs(self.y[probar] - modelo.predict(M[probar])))))
         return float(np.mean(maes))
+
+    def cv_mae(self, ind: Individual, folds: Folds) -> float:
+        """MAE medio en CV con folds distintos de los de la evolución, sin caché (D7)."""
+        M = build_matrix(ind, self.evaluator)
+        if M.shape[1] == 0:
+            raise ValueError("el individuo no tiene columnas efectivas; hay que repararlo antes")
+        return self._mae_cv(M, folds)
 
     def __call__(self, ind: Individual) -> float:
         clave = phenotype_key(ind, self.evaluator)

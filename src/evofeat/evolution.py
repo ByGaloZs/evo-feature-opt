@@ -20,7 +20,9 @@ Configuraciones (D19): A evoluciona solo la máscara (interruptores a 0); B evol
 los genes con todos los originales fijos y sin límite de columnas (D24 no aplica); C ambos.
 
 Una "generación" es un paso de reproducción: se evalúa la población inicial (generación 0)
-y después ``generations`` pasos, cada uno con ``pop_size − elitism`` evaluaciones nuevas.
+y después ``generations`` pasos, cada uno con ``pop_size − elitism`` individuos nuevos. El
+presupuesto se mide en individuos generados (100 + 100 · 98 = 9 900), no en evaluaciones
+reales: la caché de fitness ahorra evaluaciones pero no individuos.
 
 Toda la aleatoriedad llega por un ``np.random.Generator`` pasado explícitamente.
 """
@@ -80,6 +82,7 @@ class EvolutionResult:
     best_fitness: float
     hall_of_fame: list[tuple[float, Individual]]  # mejores fenotipos vistos, de mejor a peor
     history: list[dict[str, float | int]] = field(default_factory=list)
+    individuals_generated: int = 0  # presupuesto: individuos creados (iniciales + hijos)
 
 
 class Evolution:
@@ -94,11 +97,13 @@ class Evolution:
         self.ev = fitness.evaluator
         self._hof: dict[str, tuple[float, int, Individual]] = {}
         self._dropped = 0  # constantes descartadas en la generación en curso
+        self._generados = 0  # individuos generados (presupuesto)
 
     # ---- evaluación --------------------------------------------------------
 
     def _evaluar(self, ind: Individual) -> tuple[float, int]:
         """Fitness y complejidad de un individuo; actualiza el hall of fame y los contadores."""
+        self._generados += 1
         valor = self.fitness(ind)
         compl = complexity(ind, self.ev)
         self._dropped += len(dropped_constants(ind, self.ev))
@@ -262,4 +267,5 @@ class Evolution:
             best_fitness=fit[mejor],
             hall_of_fame=[(v, ind) for v, _, ind in hof],
             history=history,
+            individuals_generated=self._generados,
         )
