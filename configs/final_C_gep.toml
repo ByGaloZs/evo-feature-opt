@@ -1,0 +1,50 @@
+# Experimento final: C — completo, representación GEP (D25)
+# Parámetros fijados por el piloto (D20, hito 8): K = 3 y profundidad 3 comunes a ambos datasets;
+# ε por dataset (D17). Ver docs/DISENO.md.
+
+[experiment]
+name = "final_C_gep"
+datasets = ["diabetes", "california"]
+configuration = "C"   # baseline | A | B | C  (§9)
+representation = "gep"       # tree | gep            (D25)
+seeds = { start = 0, count = 30 }
+
+[representation]
+K = 3                         # D13, fijado por el piloto
+max_depth = 3                 # D13, fijado por el piloto
+gep_head = 7                  # se deduce de max_depth (D20)
+functions = ["add", "sub", "mul", "div", "sqrt", "log"]
+
+[evolution]
+pop_size = 100
+generations = 100
+tournament_size = 3
+elitism = 2
+p_crossover = 0.8
+p_mutation = 0.2
+max_columns = "n-1"           # D24
+
+[gep]                         # tasas de Ferreira, independientes (§8)
+p_point = 0.044
+p_is = 0.1
+p_ris = 0.1
+p_one_point = 0.3
+p_two_point = 0.3
+p_gene_recombination = 0.1
+transposon_max_len = 3
+
+[fitness]
+model = "ols"
+cv_folds = 5
+epsilon = 0.0                 # ε por defecto; cada dataset usa el suyo (abajo)
+max_cached_values = 1000      # caché LRU de vectores de fórmulas (solo afecta al tiempo y la memoria)
+
+[final_selection]
+hof_size = 10
+repeats = 3                   # 3 × 5-fold con folds nuevos (D7)
+
+[datasets.diabetes]           # ε depende de la escala del objetivo (D17, piloto)
+epsilon = 1.26
+
+[datasets.california]
+epsilon = 0.0030
