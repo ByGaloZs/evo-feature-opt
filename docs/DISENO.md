@@ -270,6 +270,7 @@ Cuatro configuraciones por dataset más la variante GEP de C, 30 semillas cada u
 - ¿Mejora C sobre la línea base? Wilcoxon de una muestra sobre e′ − e (unilateral, α = 0,05). Con OLS, e es un valor fijo.
 - ¿Difieren A, B y C? Kruskal-Wallis y, si hay diferencias, Mann-Whitney por pares con corrección de Holm.
 - *Por qué no paramétricos:* con 30 ejecuciones no podemos suponer normalidad en e′.
+- *Detalles del análisis (decisión de implementación, hito 10):* los Wilcoxon frente a la línea base se calculan para A, B, C con árboles y C con GEP, y los p-valores no se corrigen entre hipótesis distintas. Kruskal-Wallis y Holm usan A, B y C con árboles. H3 usa Mann-Whitney unilateral (B < A), H4 bilateral y H5 unilateral (B < C, solo contrastado en California). «Éxito» de una ejecución es e′ < e con una mejora mayor que 1e-9 · e, para descartar el ruido de coma flotante. H2 no tiene veredicto automático (el diseño no fija un umbral para «pequeña»): se dan las cifras. La velocidad de convergencia (D25) se mide como la generación en la que se alcanza el 90 % de la mejora total del mejor fitness en CV (`gen90`). D23 (robustez a la partición) no se ha realizado.
 - Diferencia entre el fitness en CV y e′: si es grande, indica sobreajuste a train.
 
 **D23 — Robustez a la partición (opcional).** Repetir C con 5 particiones train/validación distintas, sobre todo en Diabetes. *Por qué:* con ≈ 90 filas de validación, una sola partición puede dar una mejora o un empeoramiento por suerte.

@@ -1,0 +1,436 @@
+{
+ "california": {
+  "A": {
+   "runs": 30,
+   "formulas_total": 0,
+   "distinct_formulas": 0,
+   "top_formulas": [],
+   "variable_use_fraction": {
+    "MedInc": 0.0,
+    "HouseAge": 0.0,
+    "AveRooms": 0.0,
+    "AveBedrms": 0.0,
+    "Population": 0.0,
+    "AveOccup": 0.0,
+    "Latitude": 0.0,
+    "Longitude": 0.0
+   },
+   "operator_counts": {
+    "add": 0,
+    "sub": 0,
+    "mul": 0,
+    "div": 0,
+    "sqrt": 0,
+    "log": 0
+   },
+   "kept_fraction": {
+    "MedInc": 1.0,
+    "HouseAge": 1.0,
+    "AveRooms": 1.0,
+    "AveBedrms": 1.0,
+    "Population": 0.06666666666666667,
+    "AveOccup": 0.9333333333333333,
+    "Latitude": 1.0,
+    "Longitude": 1.0
+   },
+   "formula_nodes_median": 0.0,
+   "formula_nodes_max": 0
+  },
+  "B": {
+   "runs": 30,
+   "formulas_total": 90,
+   "distinct_formulas": 44,
+   "top_formulas": [
+    [
+     "log(1 + |AveRooms|)",
+     18
+    ],
+    [
+     "log(1 + |AveOccup|)",
+     9
+    ],
+    [
+     "sqrt(|(AveOccup * AveOccup)|)",
+     8
+    ],
+    [
+     "(sqrt(|AveOccup|) * sqrt(|AveOccup|))",
+     7
+    ],
+    [
+     "sqrt(|AveOccup|)",
+     3
+    ]
+   ],
+   "variable_use_fraction": {
+    "MedInc": 0.03333333333333333,
+    "HouseAge": 0.1,
+    "AveRooms": 0.9,
+    "AveBedrms": 0.26666666666666666,
+    "Population": 0.06666666666666667,
+    "AveOccup": 1.0,
+    "Latitude": 0.3,
+    "Longitude": 0.23333333333333334
+   },
+   "operator_counts": {
+    "add": 20,
+    "sub": 14,
+    "mul": 38,
+    "div": 4,
+    "sqrt": 52,
+    "log": 80
+   },
+   "kept_fraction": {
+    "MedInc": 1.0,
+    "HouseAge": 1.0,
+    "AveRooms": 1.0,
+    "AveBedrms": 1.0,
+    "Population": 1.0,
+    "AveOccup": 1.0,
+    "Latitude": 1.0,
+    "Longitude": 1.0
+   },
+   "formula_nodes_median": 4.0,
+   "formula_nodes_max": 13
+  },
+  "C_tree": {
+   "runs": 30,
+   "formulas_total": 74,
+   "distinct_formulas": 56,
+   "top_formulas": [
+    [
+     "log(1 + |AveRooms|)",
+     8
+    ],
+    [
+     "(AveOccup / sqrt(|AveOccup|))",
+     5
+    ],
+    [
+     "sqrt(|AveOccup|)",
+     3
+    ],
+    [
+     "log(1 + |(AveOccup - log(1 + |AveOccup|))|)",
+     3
+    ],
+    [
+     "sqrt(|Latitude|)",
+     2
+    ]
+   ],
+   "variable_use_fraction": {
+    "MedInc": 0.23333333333333334,
+    "HouseAge": 0.2,
+    "AveRooms": 0.8,
+    "AveBedrms": 0.2,
+    "Population": 0.1,
+    "AveOccup": 0.8666666666666667,
+    "Latitude": 0.43333333333333335,
+    "Longitude": 0.3
+   },
+   "operator_counts": {
+    "add": 35,
+    "sub": 24,
+    "mul": 17,
+    "div": 8,
+    "sqrt": 42,
+    "log": 56
+   },
+   "kept_fraction": {
+    "MedInc": 0.9,
+    "HouseAge": 0.8333333333333334,
+    "AveRooms": 0.2,
+    "AveBedrms": 0.26666666666666666,
+    "Population": 0.06666666666666667,
+    "AveOccup": 0.5,
+    "Latitude": 0.8666666666666667,
+    "Longitude": 0.9
+   },
+   "formula_nodes_median": 5.0,
+   "formula_nodes_max": 12
+  },
+  "C_gep": {
+   "runs": 30,
+   "formulas_total": 68,
+   "distinct_formulas": 44,
+   "top_formulas": [
+    [
+     "log(1 + |AveRooms|)",
+     5
+    ],
+    [
+     "log(1 + |log(1 + |AveRooms|)|)",
+     5
+    ],
+    [
+     "log(1 + |log(1 + |(AveOccup - log(1 + |AveOccup|))|)|)",
+     4
+    ],
+    [
+     "sqrt(|AveOccup|)",
+     3
+    ],
+    [
+     "log(1 + |log(1 + |(log(1 + |AveOccup|) - AveOccup)|)|)",
+     3
+    ]
+   ],
+   "variable_use_fraction": {
+    "MedInc": 0.06666666666666667,
+    "HouseAge": 0.16666666666666666,
+    "AveRooms": 0.8,
+    "AveBedrms": 0.1,
+    "Population": 0.03333333333333333,
+    "AveOccup": 1.0,
+    "Latitude": 0.23333333333333334,
+    "Longitude": 0.1
+   },
+   "operator_counts": {
+    "add": 21,
+    "sub": 24,
+    "mul": 11,
+    "div": 11,
+    "sqrt": 42,
+    "log": 92
+   },
+   "kept_fraction": {
+    "MedInc": 0.9666666666666667,
+    "HouseAge": 0.9,
+    "AveRooms": 0.06666666666666667,
+    "AveBedrms": 0.13333333333333333,
+    "Population": 0.26666666666666666,
+    "AveOccup": 0.36666666666666664,
+    "Latitude": 1.0,
+    "Longitude": 1.0
+   },
+   "formula_nodes_median": 5.0,
+   "formula_nodes_max": 11
+  }
+ },
+ "diabetes": {
+  "A": {
+   "runs": 30,
+   "formulas_total": 0,
+   "distinct_formulas": 0,
+   "top_formulas": [],
+   "variable_use_fraction": {
+    "age": 0.0,
+    "sex": 0.0,
+    "bmi": 0.0,
+    "bp": 0.0,
+    "s1": 0.0,
+    "s2": 0.0,
+    "s3": 0.0,
+    "s4": 0.0,
+    "s5": 0.0,
+    "s6": 0.0
+   },
+   "operator_counts": {
+    "add": 0,
+    "sub": 0,
+    "mul": 0,
+    "div": 0,
+    "sqrt": 0,
+    "log": 0
+   },
+   "kept_fraction": {
+    "age": 0.0,
+    "sex": 1.0,
+    "bmi": 1.0,
+    "bp": 1.0,
+    "s1": 0.4666666666666667,
+    "s2": 0.16666666666666666,
+    "s3": 0.8333333333333334,
+    "s4": 0.06666666666666667,
+    "s5": 1.0,
+    "s6": 0.16666666666666666
+   },
+   "formula_nodes_median": 0.0,
+   "formula_nodes_max": 0
+  },
+  "B": {
+   "runs": 30,
+   "formulas_total": 52,
+   "distinct_formulas": 47,
+   "top_formulas": [
+    [
+     "log(1 + |s6|)",
+     4
+    ],
+    [
+     "(age * sex)",
+     2
+    ],
+    [
+     "(sex / s6)",
+     2
+    ],
+    [
+     "sqrt(|((bmi + s6) + s6)|)",
+     1
+    ],
+    [
+     "((age + log(1 + |s1|)) * ((age + sex) + sex))",
+     1
+    ]
+   ],
+   "variable_use_fraction": {
+    "age": 0.5666666666666667,
+    "sex": 0.5333333333333333,
+    "bmi": 0.6333333333333333,
+    "bp": 0.2,
+    "s1": 0.23333333333333334,
+    "s2": 0.16666666666666666,
+    "s3": 0.03333333333333333,
+    "s4": 0.2,
+    "s5": 0.3333333333333333,
+    "s6": 0.6333333333333333
+   },
+   "operator_counts": {
+    "add": 44,
+    "sub": 13,
+    "mul": 28,
+    "div": 9,
+    "sqrt": 25,
+    "log": 25
+   },
+   "kept_fraction": {
+    "age": 1.0,
+    "sex": 1.0,
+    "bmi": 1.0,
+    "bp": 1.0,
+    "s1": 1.0,
+    "s2": 1.0,
+    "s3": 1.0,
+    "s4": 1.0,
+    "s5": 1.0,
+    "s6": 1.0
+   },
+   "formula_nodes_median": 6.0,
+   "formula_nodes_max": 13
+  },
+  "C_tree": {
+   "runs": 30,
+   "formulas_total": 65,
+   "distinct_formulas": 58,
+   "top_formulas": [
+    [
+     "log(1 + |s6|)",
+     4
+    ],
+    [
+     "(sex * age)",
+     3
+    ],
+    [
+     "sqrt(|(s6 + bmi)|)",
+     2
+    ],
+    [
+     "log(1 + |age|)",
+     2
+    ],
+    [
+     "(((s5 / s3) * (s6 - age)) * sqrt(|s2|))",
+     1
+    ]
+   ],
+   "variable_use_fraction": {
+    "age": 0.7,
+    "sex": 0.6,
+    "bmi": 0.6333333333333333,
+    "bp": 0.16666666666666666,
+    "s1": 0.16666666666666666,
+    "s2": 0.26666666666666666,
+    "s3": 0.2,
+    "s4": 0.2,
+    "s5": 0.3333333333333333,
+    "s6": 0.8333333333333334
+   },
+   "operator_counts": {
+    "add": 40,
+    "sub": 20,
+    "mul": 22,
+    "div": 21,
+    "sqrt": 36,
+    "log": 29
+   },
+   "kept_fraction": {
+    "age": 0.0,
+    "sex": 1.0,
+    "bmi": 0.9666666666666667,
+    "bp": 1.0,
+    "s1": 0.5,
+    "s2": 0.36666666666666664,
+    "s3": 0.6333333333333333,
+    "s4": 0.13333333333333333,
+    "s5": 0.9666666666666667,
+    "s6": 0.43333333333333335
+   },
+   "formula_nodes_median": 5.0,
+   "formula_nodes_max": 13
+  },
+  "C_gep": {
+   "runs": 30,
+   "formulas_total": 58,
+   "distinct_formulas": 53,
+   "top_formulas": [
+    [
+     "log(1 + |s6|)",
+     5
+    ],
+    [
+     "sqrt(|bmi|)",
+     2
+    ],
+    [
+     "(((sex + s6) * age) - (s5 + (bmi + s1)))",
+     1
+    ],
+    [
+     "(s6 - s5)",
+     1
+    ],
+    [
+     "log(1 + |sqrt(|sqrt(|(s6 + bmi)|)|)|)",
+     1
+    ]
+   ],
+   "variable_use_fraction": {
+    "age": 0.6,
+    "sex": 0.6,
+    "bmi": 0.7,
+    "bp": 0.13333333333333333,
+    "s1": 0.2,
+    "s2": 0.1,
+    "s3": 0.3,
+    "s4": 0.2,
+    "s5": 0.5333333333333333,
+    "s6": 0.7666666666666667
+   },
+   "operator_counts": {
+    "add": 45,
+    "sub": 26,
+    "mul": 24,
+    "div": 14,
+    "sqrt": 41,
+    "log": 35
+   },
+   "kept_fraction": {
+    "age": 0.1,
+    "sex": 0.9666666666666667,
+    "bmi": 0.9666666666666667,
+    "bp": 0.9666666666666667,
+    "s1": 0.5333333333333333,
+    "s2": 0.5666666666666667,
+    "s3": 0.5333333333333333,
+    "s4": 0.1,
+    "s5": 0.9666666666666667,
+    "s6": 0.43333333333333335
+   },
+   "formula_nodes_median": 6.0,
+   "formula_nodes_max": 12
+  }
+ }
+}
