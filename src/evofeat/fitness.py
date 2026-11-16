@@ -6,6 +6,7 @@ Implementa D6, D8, D16 y D18 (RF-05, RF-07).
 - Los folds se fijan al crear la clase y son los mismos para todos los individuos.
 - Por fold se ajusta un pipeline escalado + M solo con la parte de entrenamiento del
   fold (D8); el escalado de Xt′ vive dentro del pipeline.
+- Las fórmulas constantes en train no entran en Xt′ (D14, columnas efectivas).
 - La caché devuelve el valor de un fenotipo ya evaluado sin recalcularlo (D18).
 
 Esta clase solo ve (X, y) de train: nunca recibe ni lee el conjunto de validación.
@@ -20,7 +21,7 @@ import numpy as np
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from .individual import Individual, build_matrix, phenotype_key
+from .individual import ColumnEvaluator, Individual, build_matrix, phenotype_key
 
 Folds = Sequence[tuple[np.ndarray, np.ndarray]]  # (índices de train, índices de test)
 
@@ -41,6 +42,7 @@ class Fitness:
         self.folds = list(folds)
         self.model_factory = model_factory  # devuelve un modelo de scikit-learn sin ajustar
         self.rep = rep
+        self.evaluator = ColumnEvaluator(X, rep)  # fórmulas sobre train, con constancia (D14)
         self._cache: dict[str, float] = {}
         self.evaluations = 0  # evaluaciones reales (sin contar aciertos de caché)
         self.cache_hits = 0
@@ -55,11 +57,14 @@ class Fitness:
         return float(np.mean(maes))
 
     def __call__(self, ind: Individual) -> float:
-        clave = phenotype_key(ind, self.rep)
+        clave = phenotype_key(ind, self.evaluator)
         if clave in self._cache:
             self.cache_hits += 1
             return self._cache[clave]
-        valor = self._mae_cv(build_matrix(ind, self.X, self.rep))
+        M = build_matrix(ind, self.evaluator)
+        if M.shape[1] == 0:
+            raise ValueError("el individuo no tiene columnas efectivas; hay que repararlo antes")
+        valor = self._mae_cv(M)
         self._cache[clave] = valor
         self.evaluations += 1
         return valor

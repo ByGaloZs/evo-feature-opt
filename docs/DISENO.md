@@ -169,6 +169,7 @@ Un único individuo codifica a la vez qué originales se quedan (máscara binari
 - *Por qué protegidas:* ÷ devuelve 1 si |denominador| < 10⁻⁶; Q y L usan |x|. Así la fórmula da un valor finito en cualquier dato, también en validación, que la evolución nunca vio.
 - *Descartado:* exp (desbordamientos), funciones trigonométricas (sin sentido físico aquí y más espacio de búsqueda), if-then-else (fórmulas difíciles de interpretar).
 - Si un gen da valores no finitos o constantes en train, se desactiva. *Por qué:* una columna constante no aporta nada y una no finita rompe el modelo.
+- *Cómo se aplica (a nivel de fenotipo):* una fórmula es constante si su desviación típica sobre todo Xt es < 1e-10 · (1 + |media|); se mide sobre todo Xt (no por fold) y no usa validación. No se toca el genotipo: el interruptor efectivo es `interruptor AND no constante`, así una mutación posterior puede volver útil ese gen. `n_columns`, la complejidad, el límite de D24 y la reparación de D13 usan las columnas efectivas; si al quitar constantes un individuo se queda sin columnas, la reparación activa un original. La constancia se calcula una vez por fórmula y se guarda en caché (los valores, en una caché LRU acotada). El transformador guarda la lista final de fórmulas efectivas y `transform` la aplica tal cual a validación. *Por qué no solo informar:* una constante ocupa un hueco del límite de D24 sin aportar nada, y su coeficiente en OLS no está identificado, así que el resultado en validación dependería de detalles de implementación.
 
 **D15 — Terminales: los originales estandarizados, sin constantes numéricas.**
 
@@ -432,10 +433,11 @@ class Individual:
     mask: np.ndarray            # bool (n,)  originales en Xt′
     genomes: tuple[Genome, ...] # K fórmulas
     switches: np.ndarray        # bool (K,)  fórmulas en Xt′
-def repair(ind, n, rng) -> Individual          # 1 ≤ columnas ≤ n − 1 (D13, D24)
-def build_matrix(ind, X, rep) -> np.ndarray     # Xt′ = originales activos + fórmulas activas
-def complexity(ind, rep) -> int                 # columnas + nodos activos (D17)
-def phenotype_key(ind, rep) -> str              # huella para la caché (D18)
+# ev = ColumnEvaluator(X, rep): evalúa fórmulas sobre train, con caché y constancia (D14)
+def repair(ind, n, rng, ev) -> Individual       # 1 ≤ columnas efectivas ≤ n − 1 (D13, D24)
+def build_matrix(ind, ev) -> np.ndarray         # Xt′ = originales activos + fórmulas efectivas
+def complexity(ind, ev) -> int                  # columnas + nodos efectivos (D17)
+def phenotype_key(ind, ev) -> str               # huella para la caché (D18), sin orden de genes
 
 # fitness.py
 class Fitness:
@@ -511,10 +513,11 @@ Un JSON por ejecución en `results/runs/<experimento>/<dataset>/seed_<s>.json`. 
 | `mae` | e′ (M con Xt′) |
 | `relative_improvement` | (e − e′) / e |
 | `cv_mae_best` | fitness en CV del individuo final, para comparar con e′ (sobreajuste) |
-| `n_columns`, `n_originals_kept`, `n_synthesized` | tamaño de Xt′ y su composición |
+| `n_columns`, `n_originals_kept`, `n_synthesized` | tamaño de Xt′ y su composición (columnas efectivas) |
+| `constant_formulas_dropped` | fórmulas activas del individuo final descartadas por constantes en train (D14) |
 | `kept_originals`, `formulas` | nombres de las columnas originales que quedan y fórmulas en notación infija |
 | `secondary` | e y e′ para Ridge, KNN y Random Forest (D11) |
-| `history` | por generación: mejor fitness, mediana, complejidad del mejor, aciertos de caché |
+| `history` | por generación: mejor fitness, mediana, complejidad del mejor, aciertos de caché, fórmulas constantes descartadas |
 | `evaluations`, `cache_hits`, `seconds` | coste de la ejecución |
 
 ### 15.5 Valores concretos
