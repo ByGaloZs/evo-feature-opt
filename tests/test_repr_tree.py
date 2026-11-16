@@ -7,7 +7,7 @@ import pytest
 
 from evofeat.formula import depth, is_terminal, is_valid
 from evofeat.primitives import FUNCTION_NAMES, PRIMITIVES
-from evofeat.repr_tree import TreeRepresentation, _fin_subarbol, _profundidades_nodos
+from evofeat.repr_tree import TreeRepresentation, _alturas, _fin_subarbol, _profundidades_nodos
 
 N = 8
 
@@ -60,16 +60,15 @@ def test_helpers_de_subarbol():
 
 
 def test_estres_10000_operaciones_nunca_superan_profundidad():
-    """10 000 cruces y mutaciones aleatorios: preorden válido y profundidad ≤ 3."""
+    """10 000 cruces y mutaciones aleatorios: preorden válido, profundidad ≤ 3, raíz función."""
     rep, rng = _rep(3), np.random.default_rng(5)
-    # mitad Full (profundidad máxima, fuerza el rechazo por profundidad) y mitad ramped
+    # mitad Full (profundidad máxima, el caso más exigente para el cruce) y mitad ramped
     pob = [rep.full(rng) for _ in range(25)] + [rep.random_genome(rng) for _ in range(25)]
-    operaciones = rechazos = 0
+    operaciones = 0
     while operaciones < 10_000:
         if rng.random() < 0.5:
             a, b = pob[int(rng.integers(50))], pob[int(rng.integers(50))]
             h1, h2 = rep.crossover(a, b, rng)
-            rechazos += (h1 == a) + (h2 == b)
             hijos = [h1, h2]
             operaciones += 2
         else:
@@ -78,9 +77,26 @@ def test_estres_10000_operaciones_nunca_superan_profundidad():
         for h in hijos:
             assert is_valid(h), h
             assert depth(h) <= 3, h
+            assert h[0] in PRIMITIVES, h  # la raíz es siempre una función
             assert _terminales_validos(h)
             pob[int(rng.integers(50))] = h  # realimenta la población
-    assert rechazos > 0  # la regla del límite de profundidad sí se ejerció
+
+
+def test_raiz_siempre_funcion_en_inicializacion():
+    rep, rng = _rep(3), np.random.default_rng(12)
+    assert all(rep.random_genome(rng)[0] in PRIMITIVES for _ in range(1000))
+
+
+def test_tasa_de_cruce_efectiva_es_la_nominal():
+    """El cruce nunca necesita la red de seguridad: casi siempre cambia a algún hijo."""
+    rep, rng = _rep(3), np.random.default_rng(13)
+    cambia = 0
+    total = 2000
+    for _ in range(total):
+        a, b = rep.full(rng), rep.full(rng)
+        h1, h2 = rep.crossover(a, b, rng)
+        cambia += (h1 != a) or (h2 != b)
+    assert cambia / total > 0.9
 
 
 def test_cruce_intercambia_subarboles_y_conserva_simbolos():
@@ -96,20 +112,21 @@ def test_cruce_intercambia_subarboles_y_conserva_simbolos():
     assert cambios > 0
 
 
-def test_cruce_con_hijo_demasiado_profundo_conserva_padre():
-    rep = TreeRepresentation(2, 1, ("add",))
-    a = ("add", "x0", "x1")
-    # forzamos un cruce donde el hijo superaría profundidad 1: padre con profundidad 1 y
-    # donante con un subárbol de profundidad 1 insertado en una hoja -> profundidad 2
+def test_cruce_con_limite_estricto_siempre_posible():
+    """Con max_depth = 1 casi todo cruce ingenuo se pasaría; aquí siempre hay un punto válido."""
+    rep = TreeRepresentation(2, 1, ("add", "sub"))
     rng = np.random.default_rng(7)
-    vistos = set()
+    a, b = ("add", "x0", "x1"), ("sub", "x1", "x1")
     for _ in range(300):
-        h1, h2 = rep.crossover(a, a, rng)
-        vistos |= {h1, h2}
-        assert depth(h1) <= 1 and depth(h2) <= 1
-    # hoja <- subárbol de profundidad 1 daría profundidad 2: se rechaza y queda el padre
-    assert a in vistos
-    assert all(depth(h) <= 1 for h in vistos)
+        h1, h2 = rep.crossover(a, b, rng)
+        for h in (h1, h2):
+            assert is_valid(h) and depth(h) == 1 and h[0] in PRIMITIVES
+
+
+def test_alturas():
+    f = ("add", "sqrt", "x0", "mul", "x1", "x2")
+    assert _alturas(f) == [2, 1, 0, 1, 0, 0]
+    assert _alturas(("x0",)) == [0]
 
 
 def test_mutacion_puntual_cambia_un_nodo_con_igual_aridad():
@@ -136,6 +153,13 @@ def test_mutacion_puntual_sin_alternativas_no_cambia():
     g = ("add", "x0", "x0")
     rng = np.random.default_rng(9)
     assert all(rep._mutacion_puntual(g, rng) == g for _ in range(20))
+
+
+def test_mutacion_de_subarbol_en_la_raiz_deja_funcion():
+    rep, rng = _rep(3), np.random.default_rng(14)
+    g = ("add", "x0", "x1")
+    # forzamos el punto raíz: con un árbol de 3 nodos y muchas repeticiones sale casi siempre
+    assert all(rep._mutacion_subarbol(g, rng)[0] in PRIMITIVES for _ in range(500))
 
 
 def test_mutacion_de_subarbol_explora_formas_nuevas():

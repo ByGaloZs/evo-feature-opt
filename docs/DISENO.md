@@ -212,7 +212,10 @@ Algoritmo generacional con elitismo, selección por torneo y operadores de PG co
 | Cruce de bits | Uniforme | El orden de los atributos es arbitrario, así que no hay bloques contiguos que preservar |
 | Mutación de árboles | Probabilidad 0,2 por individuo: de subárbol (lo sustituye por uno nuevo Grow) o puntual (cambia un nodo por otro de igual aridad), 50 % cada una | La de subárbol explora fórmulas nuevas; la puntual hace ajustes finos sin cambiar la forma |
 | Mutación de bits | 1/(n + K) por bit | Se cambia de media un bit por individuo: explora sin destruir |
-| Límite de profundidad | Un hijo que supera la profundidad 3 se descarta y se conserva el padre | Regla clásica de Koza; mantiene el tamaño acotado sin reparar árboles |
+| Límite de profundidad | En el cruce, el punto del segundo padre se elige solo entre los subárboles que hacen que ambos hijos quepan; en la mutación de subárbol, el sustituto se limita a la profundidad disponible. Se conserva la comprobación del límite como red de seguridad (si falla, se conserva el padre) | Mantiene el tamaño acotado y la tasa de cruce efectiva es la nominal (el descarte de Koza la reduciría sin que se note) |
+| Raíz de los árboles | Siempre una función (en Grow, en cruce y en mutación; en GEP, la primera posición de la cabeza) | Un árbol que es solo un terminal duplica un original, que ya controla la máscara; igual en árboles y GEP para que D25 sea justa |
+| Puntos de cruce y mutación | Uniformes entre todos los nodos (alternativa: 90/10 de Koza, a revisar en el piloto) | Los árboles son pequeños; si las fórmulas finales solo difieren en hojas, se pasa a 90/10 |
+| Grow | Cada nodo uniforme entre funciones y terminales | Definición clásica; P(terminal) depende de n (10/16 en Diabetes, 8/14 en California) |
 | Semillas aleatorias | 30 por configuración y dataset | Suficiente para medianas estables y tests no paramétricos (§9) |
 
 - *Coste estimado:* 10 000 evaluaciones × 5 folds de OLS por ejecución. En California son unos minutos por ejecución, menos con la caché de D18. Se confirma midiendo en el piloto antes de lanzar las 30 semillas.
