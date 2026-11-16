@@ -67,6 +67,8 @@ def decode_karva(gene: Genome) -> Formula:
 class GepRepresentation:
     """Operadores de GEP sobre un gen cabeza + cola (interfaz ``Representation``, §15.2)."""
 
+    kind = "gep"
+
     def __init__(
         self,
         n_features: int,

@@ -79,6 +79,8 @@ def _alturas(f: Formula) -> list[int]:
 class TreeRepresentation:
     """Operadores de PG con árboles en preorden (interfaz ``Representation``, §15.2)."""
 
+    kind = "tree"
+
     def __init__(self, n_features: int, max_depth: int, functions: tuple[str, ...] | list[str]) -> None:
         if n_features < 1:
             raise ValueError("n_features debe ser ≥ 1")

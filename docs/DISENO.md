@@ -225,6 +225,9 @@ Algoritmo generacional con elitismo, selección por torneo y operadores de PG co
   - *Coste aceptado:* más código propio y más riesgo de errores sutiles. Se compensa con tests por hito (§15.6), incluido un problema sintético con solución conocida.
   - *Descartado:* el módulo de PG de DEAP (menos código, pero la comparación con un GEP propio mezclaría dos implementaciones distintas).
 - *Variante GEP (solo para D25):* h = 7, así que t = 8 y cada gen tiene 15 símbolos, como mucho 15 nodos, igual que un árbol de profundidad 3. Operadores y tasas por defecto de GEP (Ferreira): mutación 0,044 por símbolo, transposiciones IS y RIS 0,1 cada una, recombinación de 1 punto, 2 puntos y de genes 0,3 / 0,3 / 0,1. No hay transposición de gen: OLS no depende del orden de las columnas, así que permutar genes no cambia nunca el fitness.
+- *Unidad de cada operador (hito 6):* en árboles, el cruce (0,8 por pareja) actúa sobre UN árbol k al azar (subárbol o intercambio del gen k con su interruptor, 50 % cada uno) y la mutación (0,2 por individuo) sobre UN árbol al azar. En GEP, las tasas de Ferreira se aplican de forma independiente a CADA gen (1 punto, 2 puntos, mutación puntual, IS, RIS) y, con 0,1 por pareja, se intercambia un gen al azar con su interruptor. La máscara se cruza de forma uniforme con probabilidad `p_crossover` por pareja en ambas representaciones; los interruptores no se cruzan aparte (viajan con su gen) y, igual que la máscara, mutan por inversión de bit con probabilidad 1/(n + K).
+- *Generaciones:* se evalúa la población inicial (generación 0) y después 100 pasos de reproducción de `pop_size − elitismo` = 98 evaluaciones nuevas cada uno (≈ 9 900 evaluaciones como máximo, menos las que ahorre la caché).
+- *Configuraciones A/B/C (D19):* A evoluciona solo la máscara (interruptores a 0); B evoluciona solo los genes con todos los originales fijos, sin límite de columnas y sin individuos semilla; C evoluciona ambos.
 - *Tasas por representación:* los árboles usan `p_crossover` y `p_mutation`; GEP usa las tasas de Ferreira, aplicadas cada una de forma independiente y definidas en una sección `[gep]` del TOML. Selección, elitismo, operadores de máscara e interruptores, fitness y presupuesto son idénticos en ambas.
 - *Gen e interruptor son una unidad:* en el intercambio de árboles completos y en la recombinación de genes, el interruptor k viaja con el gen k. Los interruptores mutan por inversión de bit, igual que la máscara.
 - *Precisiones de GEP:* en IS y RIS, lo que el fragmento desplaza fuera de la cabeza se pierde y la cola no se toca; si RIS no encuentra ninguna función no hace nada; la posición 0 de la cabeza solo admite funciones y la cola solo terminales. Los fragmentos miden de 1 a 3 símbolos, IS inserta en la cabeza (nunca en la raíz) y RIS parte de una función de la cabeza.
@@ -496,6 +499,7 @@ transposon_max_len = 3
 model = "ols"
 cv_folds = 5
 epsilon = 0.0                 # D17, valor fijado por el piloto
+max_cached_values = 1000      # caché LRU de vectores de fórmulas (≈ 130 MB en California); solo afecta al tiempo y la memoria
 
 [final_selection]
 hof_size = 10

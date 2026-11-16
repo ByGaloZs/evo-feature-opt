@@ -7,7 +7,9 @@ Implementa D6, D8, D16 y D18 (RF-05, RF-07).
 - Por fold se ajusta un pipeline escalado + M solo con la parte de entrenamiento del
   fold (D8); el escalado de Xt′ vive dentro del pipeline.
 - Las fórmulas constantes en train no entran en Xt′ (D14, columnas efectivas).
-- La caché devuelve el valor de un fenotipo ya evaluado sin recalcularlo (D18).
+- La caché de fitness (huella -> MAE, sin límite: cada entrada es un float) devuelve el valor
+  de un fenotipo ya evaluado sin recalcularlo (D18). Es distinta de la caché LRU de vectores
+  de valores de fórmulas (``max_cached_values``), que solo afecta al tiempo y a la memoria.
 
 Esta clase solo ve (X, y) de train: nunca recibe ni lee el conjunto de validación.
 """
@@ -36,13 +38,14 @@ class Fitness:
         folds: Folds,
         model_factory: Callable[[], Any],
         rep: Any,
+        max_cached_values: int = 1000,
     ) -> None:
         self.X = X  # originales de train, ya escalados (D2)
         self.y = y
         self.folds = list(folds)
         self.model_factory = model_factory  # devuelve un modelo de scikit-learn sin ajustar
         self.rep = rep
-        self.evaluator = ColumnEvaluator(X, rep)  # fórmulas sobre train, con constancia (D14)
+        self.evaluator = ColumnEvaluator(X, rep, max_cached_values)  # fórmulas sobre train, con constancia (D14)
         self._cache: dict[str, float] = {}
         self.evaluations = 0  # evaluaciones reales (sin contar aciertos de caché)
         self.cache_hits = 0
