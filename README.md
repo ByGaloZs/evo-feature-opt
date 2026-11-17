@@ -46,6 +46,16 @@ python scripts/diagnose_tail.py results/runs        # diagnóstico de la cola de
 - `results/diagnostics/`: diagnóstico de la cola de ejecuciones malas de C con árboles en California.
 - `docs/INTERPRETACION.md`: interpretación manual (distinta de `results/analysis/informe.md`, que es automático).
 
+### Documento único con todos los resultados
+
+```bash
+python scripts/build_resultados.py                  # regenera docs/RESULTADOS.md
+```
+
+`docs/RESULTADOS.md` reúne, en orden cronológico, el resumen de H1–H5, el piloto, las hipótesis, los experimentos finales
+y los análisis posteriores a la validación (D23, diagnóstico de California e interpretación de H2). Se genera a partir de los
+demás archivos; no se edita a mano (un test comprueba que está al día).
+
 
 - Cada experimento es un TOML de `configs/`; cada ejecución escribe un JSON en
   `results/runs/<experimento>/<dataset>/seed_<s>.json` y relanzar el script no repite las ya hechas.
