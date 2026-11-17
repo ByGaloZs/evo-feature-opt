@@ -28,6 +28,8 @@ PILOTO = RAIZ / "results" / "pilot"
 D23 = RAIZ / "results" / "d23" / "resumen.md"
 DIAGNOSTICO = RAIZ / "results" / "diagnostics" / "california_c_tree_tail.md"
 INTERPRETACION = RAIZ / "docs" / "INTERPRETACION.md"
+EXPLORATORIO = RAIZ / "docs" / "EXPLORATORIO.md"
+EXPLORA_RESUMEN = RAIZ / "results" / "explore_mutation" / "resumen.md"
 
 ETIQUETA = {"baseline": "Línea base", "A": "A (selección)", "B": "B (síntesis)", "C_tree": "C (árbol)", "C_gep": "C (GEP)"}
 NOMBRE_DATASET = {"diabetes": "Diabetes", "california": "California"}
@@ -121,6 +123,29 @@ def finales() -> str:
     return "\n".join(partes)
 
 
+def seccion(texto: str, titulo: str) -> str:
+    """Contenido de la sección ``## titulo`` hasta la siguiente de nivel 2 (o el final)."""
+    marca = f"## {titulo}"
+    if marca not in texto:
+        raise ValueError(f"no hay sección '{titulo}'")
+    cuerpo = texto[texto.index(marca) + len(marca):]
+    return (cuerpo[: cuerpo.index("\n## ")] if "\n## " in cuerpo else cuerpo).strip("\n")
+
+
+def exploratorio() -> str | None:
+    """Sección 5.4 (tasa de mutación de los árboles, solo train); None si todavía no se ha ejecutado."""
+    if not EXPLORA_RESUMEN.exists():
+        return None
+    doc = leer(EXPLORATORIO)
+    partes = ["### 5.4 Exploratorio: tasa de mutación de los árboles (solo train)", "",
+              "Planteamiento y diseño completos en `docs/EXPLORATORIO.md` (escrito y commiteado antes de ejecutar). "
+              "Es exploratorio, posterior a la validación, y **no cambia los resultados finales**.", "",
+              "**H6 (exploratoria).** " + seccion(doc, "H6 (exploratoria)"), "",
+              bajar_niveles("## Resultados\n\n" + leer(EXPLORA_RESUMEN).strip("\n"), 2), "",
+              bajar_niveles("## Interpretación\n\n" + seccion(doc, "Resultados e interpretación"), 2), ""]
+    return "\n".join(partes)
+
+
 def construir() -> str:
     estadistica = json.loads(leer(ANALISIS / "estadistica.json"))
     d23 = bajar_niveles(sin_titulo(leer(D23)), 1)
@@ -159,6 +184,14 @@ def construir() -> str:
         "### 5.3 Interpretación de H2 (manual)", "",
         bajar_niveles(interp, 1), "",
     ]
+    explora = exploratorio()
+    if explora is not None:
+        partes += [explora]
+        fila = ("| 5.4 Exploratorio | Tasa de mutación de los árboles (solo train) | `results/explore_mutation/`, `docs/EXPLORATORIO.md` "
+                "| después de ver la validación |")
+        i = partes.index("| 5. Posterior a la validación | D23, diagnóstico de la cola de California e interpretación de H2 | "
+                         "`results/d23/`, `results/diagnostics/`, `docs/INTERPRETACION.md` | después de ver la validación |")
+        partes.insert(i + 1, fila)
     return "\n".join(partes)
 
 

@@ -62,3 +62,18 @@ def test_las_fuentes_no_se_modifican_al_construir():
 def test_bajar_niveles_respeta_bloques_de_codigo():
     assert br.bajar_niveles("## a\n```\n# no\n```\n### b", 1) == "### a\n```\n# no\n```\n#### b"
     assert br.sin_titulo("# Titulo\n\ntexto\n## sec") == "texto\n## sec"
+
+
+def test_seccion_5_4_solo_aparece_si_el_exploratorio_esta_ejecutado(tmp_path, monkeypatch):
+    assert ("### 5.4 Exploratorio" in br.construir()) == br.EXPLORA_RESUMEN.exists()  # solo si ya se ha ejecutado
+    resumen = tmp_path / "resumen.md"
+    resumen.write_text("Exploratorio.\n\n| Brazo | n |\n| --- | --- |\n| pm0.5 | 30 |\n")
+    doc = tmp_path / "EXPLORATORIO.md"
+    doc.write_text("# T\n\n## H6 (exploratoria)\n\nTexto de H6.\n\n## Diseño\n\nx\n\n## Resultados e interpretación\n\nInterpretación manual.\n")
+    monkeypatch.setattr(br, "EXPLORA_RESUMEN", resumen)
+    monkeypatch.setattr(br, "EXPLORATORIO", doc)
+    texto = br.construir()
+    assert "### 5.4 Exploratorio" in texto and "Texto de H6." in texto and "| pm0.5 | 30 |" in texto and "Interpretación manual." in texto
+    assert "| 5.4 Exploratorio |" in texto
+    assert texto.index("### 5.3") < texto.index("### 5.4")
+    assert br.seccion("## a\nuno\n\n## b\ndos", "a") == "uno"
