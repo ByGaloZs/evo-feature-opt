@@ -84,8 +84,8 @@ def test_nota_de_h4_en_la_seccion_1():
     resumen = texto[texto.index("## 1. Resumen"): texto.index("## 2. Piloto")]
     nota = ("**H4 tras los análisis posteriores (5.2 y 5.4):** misma mediana de e′, pero los árboles fallan más "
             "(11/30 ejecuciones malas en California, fallo de búsqueda); con más mutación la cola casi desaparece "
-            "(descriptivo, no significativo). La diferencia de fiabilidad se atribuye probablemente a la intensidad de "
-            "mutación, no a la representación.")
+            "(descriptivo, no significativo). La diferencia de fiabilidad se atribuye posiblemente, al menos en parte, a la "
+            "intensidad de mutación; el exploratorio no permite descartar un efecto de la representación.")
     assert nota in resumen
     # tras la nota de H2 y antes de la tabla de e / e′
     assert resumen.index("**Conclusión de H2 tras D23") < resumen.index(nota) < resumen.index("Resumen de e frente a e′")

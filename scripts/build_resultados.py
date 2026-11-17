@@ -87,8 +87,8 @@ def resumen(estadistica: dict) -> str:
                    "La mejora de Diabetes en la partición 2026 no se reproduce en otras particiones.", "",
                "**H4 tras los análisis posteriores (5.2 y 5.4):** misma mediana de e′, pero los árboles fallan más "
                "(11/30 ejecuciones malas en California, fallo de búsqueda); con más mutación la cola casi desaparece "
-               "(descriptivo, no significativo). La diferencia de fiabilidad se atribuye probablemente a la intensidad de "
-               "mutación, no a la representación.", "",
+               "(descriptivo, no significativo). La diferencia de fiabilidad se atribuye posiblemente, al menos en parte, a la "
+               "intensidad de mutación; el exploratorio no permite descartar un efecto de la representación.", "",
                "Resumen de e frente a e′ (mediana de e′ sobre las 30 semillas):", "",
                "| Dataset | Configuración | e | mediana e′ | % e′ < e | mejora rel. mediana |", "| --- | --- | --- | --- | --- | --- |"]
     for ds, porclave in estadistica["descriptive"].items():
