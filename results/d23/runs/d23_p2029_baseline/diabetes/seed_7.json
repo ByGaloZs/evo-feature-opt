@@ -1,0 +1,63 @@
+{
+ "meta": {
+  "experiment": "d23_p2029_baseline",
+  "dataset": "diabetes",
+  "configuration": "baseline",
+  "epsilon": 1.26,
+  "representation": "tree",
+  "seed": 7,
+  "config_hash": "f111fb71dfaee12ebba7918e6bf105a615af7a96435deba35af153d21481341a",
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-43-generic-x86_64-with-glibc2.39",
+  "libraries": {
+   "numpy": "2.5.5",
+   "scipy": "1.18.1",
+   "scikit-learn": "1.9.1"
+  },
+  "date": "2026-11-17T13:05:30+00:00"
+ },
+ "baseline_mae": 44.37495988332303,
+ "mae": 44.37495988332304,
+ "relative_improvement": -1.6012245140691067e-16,
+ "cv_mae_best": 44.397059288902575,
+ "evolution_best_fitness": null,
+ "n_columns": 10,
+ "n_originals_kept": 10,
+ "n_synthesized": 0,
+ "kept_originals": [
+  "age",
+  "sex",
+  "bmi",
+  "bp",
+  "s1",
+  "s2",
+  "s3",
+  "s4",
+  "s5",
+  "s6"
+ ],
+ "formulas": [],
+ "constant_formulas_dropped": [],
+ "secondary": {
+  "ridge": {
+   "baseline_mae": 44.20843008518969,
+   "mae": 44.20843008518967
+  },
+  "knn": {
+   "baseline_mae": 48.402272727272724,
+   "mae": 48.402272727272724
+  },
+  "rf": {
+   "baseline_mae": 46.01238636363637,
+   "mae": 46.01238636363637
+  }
+ },
+ "history": [],
+ "hall_of_fame": [],
+ "individuals_generated": 0,
+ "distinct_evaluations": 0,
+ "evaluations": 0,
+ "cache_hits": 0,
+ "seconds_fit": 0.027913696998439264,
+ "seconds": 0.7288006939998013
+}
