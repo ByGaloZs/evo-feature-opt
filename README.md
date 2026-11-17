@@ -40,10 +40,13 @@ python scripts/run_d23.py --dry-run                 # D23: nº de ejecuciones y 
 python scripts/run_d23.py                           # 5 particiones nuevas (semillas 2027–2031) × (línea base + C árbol) × 10 semillas
 python scripts/run_d23.py --summarize               # regenera results/d23/resumen.{md,json} con lo que ya hay
 python scripts/diagnose_tail.py results/runs        # diagnóstico de la cola de C con árboles en California
+python scripts/run_explore_mutation.py --dry-run    # exploratorio (solo train): nº de ejecuciones y tiempo estimado
+python scripts/run_explore_mutation.py              # C con árboles en California con p_mutation = 0,5 y 1,0 (60 ejecuciones)
 ```
 
 - `results/d23/` (`splits/`, `runs/`, `resumen.md`): robustez a la partición en Diabetes; no toca `data/splits/` ni `results/runs/`.
 - `results/diagnostics/`: diagnóstico de la cola de ejecuciones malas de C con árboles en California.
+- `results/explore_mutation/` y `docs/EXPLORATORIO.md`: análisis exploratorio de la tasa de mutación de los árboles (solo train, no cambia los resultados finales).
 - `docs/INTERPRETACION.md`: interpretación manual (distinta de `results/analysis/informe.md`, que es automático).
 
 ### Documento único con todos los resultados

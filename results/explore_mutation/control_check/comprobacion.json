@@ -1,0 +1,20 @@
+[
+ {
+  "seed": 0,
+  "final_cv_mae_best": 0.4780012755018475,
+  "rerun_cv_mae_best": 0.4780012755018475,
+  "equal": true
+ },
+ {
+  "seed": 1,
+  "final_cv_mae_best": 0.5252402426870648,
+  "rerun_cv_mae_best": 0.5252402426870648,
+  "equal": true
+ },
+ {
+  "seed": 2,
+  "final_cv_mae_best": 0.49196350356102,
+  "rerun_cv_mae_best": 0.49196350356102,
+  "equal": true
+ }
+]

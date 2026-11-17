@@ -279,6 +279,7 @@ Cuatro configuraciones por dataset más la variante GEP de C, 30 semillas cada u
 - **Limitación de D23:** K, profundidad y ε se eligieron con el train de la partición 2026, que se solapa con la validación de las particiones nuevas. En Diabetes el piloto no distinguía entre combinaciones (las 9 quedaban dentro de ε), así que el efecto es despreciable.
 - **Reglas de lo posterior a la validación:** no se cambia el código del sistema ni ningún parámetro; los resultados se informan salgan como salgan; cualquier cambio que se derive es una decisión posterior a la validación que toma el usuario.
 - **Diagnóstico de la cola de C con árboles en California (posterior a la validación).** Solo diagnóstico (`scripts/diagnose_tail.py`, `results/diagnostics/`): no cambia ningún parámetro ni el código.
+- **Exploratorio de la tasa de mutación de los árboles (posterior a la validación, solo train).** Planteamiento en `docs/EXPLORATORIO.md` (escrito antes de ejecutar), script `scripts/run_explore_mutation.py`, resultados en `results/explore_mutation/`. Contrasta H6; no cambia los resultados finales ni la configuración evaluada en validación (`p_mutation` = 0,2).
 
 **D25 — Comparación de representaciones: árboles frente a GEP.** La configuración C se ejecuta dos veces, con árboles y con GEP, cambiando **solo** la representación de las fórmulas.
 

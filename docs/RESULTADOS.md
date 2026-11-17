@@ -9,6 +9,7 @@ Documento de consulta que reúne todos los resultados del proyecto. **Se genera 
 | 3. Hipótesis | H1–H5 tal como se escribieron antes de lanzar los experimentos | `docs/HIPOTESIS.md` | antes de validación |
 | 4. Experimentos finales | Tablas, tests estadísticos, modelos secundarios, fórmulas y figuras | `results/analysis/` | validación |
 | 5. Posterior a la validación | D23, diagnóstico de la cola de California e interpretación de H2 | `results/d23/`, `results/diagnostics/`, `docs/INTERPRETACION.md` | después de ver la validación |
+| 5.4 Exploratorio | Tasa de mutación de los árboles (solo train) | `results/explore_mutation/`, `docs/EXPLORATORIO.md` | después de ver la validación |
 
 Los análisis de la sección 5 se hicieron después de ver los resultados de validación, sin cambiar el código del sistema ni ningún parámetro; se informan salgan como salgan (`docs/DISENO.md`, D23).
 
@@ -655,3 +656,62 @@ Interpretación manual, posterior a la validación (2026-11-17). Es distinta de 
 **Conclusión.** H2 se apoya en el sentido de **nula**: la mejora de 1,28 % de la partición 2026 es estadísticamente significativa dentro de esa partición, pero no se reproduce en otras particiones; su signo cambia entre particiones y la mediana entre ellas es −0,73 %. El Wilcoxon solo recoge la variabilidad entre semillas con la partición fija, no entre particiones. La 2026 es además la partición con la validación más fácil frente a su CV (e / CV = 0,847; las otras, de 0,891 a 1,033).
 
 **Límites.** Con 10 semillas por partición cada mediana es ruidosa. K, profundidad y ε se eligieron con el train de la 2026, que se solapa con la validación de las nuevas particiones (en Diabetes el piloto no distinguía entre combinaciones). D23 es descriptivo; con 5 particiones no se hacen tests.
+
+### 5.4 Exploratorio: tasa de mutación de los árboles (solo train)
+
+Planteamiento y diseño completos en `docs/EXPLORATORIO.md` (escrito y commiteado antes de ejecutar). Es exploratorio, posterior a la validación, y **no cambia los resultados finales**.
+
+**H6 (exploratoria).** Con `p_mutation` mayor, **aumenta la proporción de ejecuciones con MAE en CV < 0,5** y **disminuye el RIC del MAE en CV**, acercándose a GEP (28/30).
+Si no ocurre, la asimetría de mutación no explica la diferencia entre árboles y GEP.
+
+#### Resultados
+
+Exploratorio, posterior a la validación y **solo con train** (MAE en CV de re-selección, folds nuevos). No cambia los resultados finales: la configuración evaluada en validación sigue siendo `p_mutation = 0,2`.
+
+**Comprobación del control:** las semillas 0, 1, 2 reejecutadas con `p_mutation = 0,2` dan exactamente el mismo MAE en CV que los JSON finales: sí.
+
+| Brazo | n | % CV < 0,5 | mediana CV | Q1 | Q3 | RIC | % transforma AveOccup | % log(1 + \|AveRooms\|) | complejidad | eval. distintas | tiempo (s) | gen. mediana bajo 0,5 (ejecuciones) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| pm0.2 (control) | 30 | 70 % (21/30) | 0.4855 | 0.4822 | 0.5106 | 0.0285 | 80 % | 50 % | 17 | 4634 | 114 | 39 (21/30) |
+| pm0.5 | 30 | 87 % (26/30) | 0.4828 | 0.4813 | 0.4889 | 0.0076 | 97 % | 67 % | 18.5 | 6256 | 164 | 45 (26/30) |
+| pm1 | 30 | 87 % (26/30) | 0.4852 | 0.4820 | 0.4910 | 0.0090 | 97 % | 53 % | 18 | 7120 | 179 | 35 (26/30) |
+| GEP (referencia) | 30 | 93 % (28/30) | 0.4834 | 0.4817 | 0.4890 | 0.0074 | 100 % | 47 % | 17 | 6567 | 164 | 29 (28/30) |
+
+Tests **exploratorios, sin corregir por comparaciones múltiples** (bilaterales):
+
+| Brazo | Frente a | Fisher exacto (proporción CV < 0,5), p | Mann-Whitney (MAE en CV), p |
+| --- | --- | --- | --- |
+| pm0.5 | control (0,2) | 0.209 | 0.186 |
+| pm0.5 | GEP | 0.671 | 0.69 |
+| pm1 | control (0,2) | 0.209 | 0.455 |
+| pm1 | GEP | 0.671 | 0.464 |
+
+#### Interpretación
+
+Ejecutado el 2026-11-17: 60 ejecuciones, 0 fallos. Antes de lanzar los brazos, las semillas 0, 1 y 2 reejecutadas con `p_mutation` = 0,2 dieron exactamente el
+mismo MAE en CV que los JSON finales (el control se reutiliza con garantías). Tabla y tests en `results/explore_mutation/resumen.md` y en la sección 5.4 de
+`docs/RESULTADOS.md`.
+
+**Lo observado (solo train).**
+
+| | % CV < 0,5 | RIC del MAE en CV | % transforma AveOccup |
+| --- | --- | --- | --- |
+| `p_mutation` 0,2 (control) | 70 % (21/30) | 0,0285 | 80 % |
+| 0,5 | 87 % (26/30) | 0,0076 | 97 % |
+| 1,0 | 87 % (26/30) | 0,0090 | 97 % |
+| GEP | 93 % (28/30) | 0,0074 | 100 % |
+
+El patrón descriptivo es el que predecía H6: la proporción con CV < 0,5 sube y se acerca a GEP, y el RIC cae hasta el nivel de GEP. Lo que desaparece es la cola
+mala (Q3 de 0,5106 a 0,4889 y 0,4910), no el centro (medianas 0,4855, 0,4828, 0,4852; GEP 0,4834).
+
+**Qué no se puede afirmar.** Los tests no detectan diferencia con el control (Fisher p = 0,209 en ambos brazos; Mann-Whitney p = 0,186 y 0,455) y tampoco con
+GEP (Fisher p = 0,671; Mann-Whitney p = 0,690 y 0,464), sin corregir; con 30 ejecuciones por brazo, una diferencia de 5 ejecuciones (21 frente a 26) no es
+detectable. No hay efecto dosis-respuesta entre 0,5 y 1,0. Además, más mutación va acompañada de más evaluaciones distintas (4 634 → 6 256 y 7 120; GEP 6 567) y más tiempo
+(114 → 164 y 179 s; GEP 164 s), así que el cambio no es solo de tasa de mutación.
+
+**Interpretación.** El resultado es compatible con que la asimetría de mutación explique, al menos en parte, la menor fiabilidad de los árboles, pero no lo demuestra.
+Tampoco descarta una diferencia residual entre representaciones: con `p_mutation` = 1,0 sigue habiendo una sola operación de mutación por individuo (frente a 2,58 en GEP) y
+los brazos quedan algo por debajo de GEP (87 % frente a 93 %). Otras diferencias que podrían contribuir, sin probarlas: el cruce (en GEP se aplica a cada gen en cada pareja; en
+árboles, a un solo árbol y con puerta de 0,8) y la recombinación de genes, y que los cromosomas de GEP tienen símbolos no expresados que permiten cambios neutros.
+
+**Esto no cambia los resultados finales:** la configuración evaluada en validación sigue siendo `p_mutation` = 0,2.

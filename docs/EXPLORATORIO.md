@@ -54,4 +54,30 @@ Si no ocurre, la asimetría de mutación no explica la diferencia entre árboles
 
 ## Resultados e interpretación
 
-*Se escribirá después de ejecutar (máximo media página). No cambia los resultados finales.*
+Ejecutado el 2026-11-17: 60 ejecuciones, 0 fallos. Antes de lanzar los brazos, las semillas 0, 1 y 2 reejecutadas con `p_mutation` = 0,2 dieron exactamente el
+mismo MAE en CV que los JSON finales (el control se reutiliza con garantías). Tabla y tests en `results/explore_mutation/resumen.md` y en la sección 5.4 de
+`docs/RESULTADOS.md`.
+
+**Lo observado (solo train).**
+
+| | % CV < 0,5 | RIC del MAE en CV | % transforma AveOccup |
+| --- | --- | --- | --- |
+| `p_mutation` 0,2 (control) | 70 % (21/30) | 0,0285 | 80 % |
+| 0,5 | 87 % (26/30) | 0,0076 | 97 % |
+| 1,0 | 87 % (26/30) | 0,0090 | 97 % |
+| GEP | 93 % (28/30) | 0,0074 | 100 % |
+
+El patrón descriptivo es el que predecía H6: la proporción con CV < 0,5 sube y se acerca a GEP, y el RIC cae hasta el nivel de GEP. Lo que desaparece es la cola
+mala (Q3 de 0,5106 a 0,4889 y 0,4910), no el centro (medianas 0,4855, 0,4828, 0,4852; GEP 0,4834).
+
+**Qué no se puede afirmar.** Los tests no detectan diferencia con el control (Fisher p = 0,209 en ambos brazos; Mann-Whitney p = 0,186 y 0,455) y tampoco con
+GEP (Fisher p = 0,671; Mann-Whitney p = 0,690 y 0,464), sin corregir; con 30 ejecuciones por brazo, una diferencia de 5 ejecuciones (21 frente a 26) no es
+detectable. No hay efecto dosis-respuesta entre 0,5 y 1,0. Además, más mutación va acompañada de más evaluaciones distintas (4 634 → 6 256 y 7 120; GEP 6 567) y más tiempo
+(114 → 164 y 179 s; GEP 164 s), así que el cambio no es solo de tasa de mutación.
+
+**Interpretación.** El resultado es compatible con que la asimetría de mutación explique, al menos en parte, la menor fiabilidad de los árboles, pero no lo demuestra.
+Tampoco descarta una diferencia residual entre representaciones: con `p_mutation` = 1,0 sigue habiendo una sola operación de mutación por individuo (frente a 2,58 en GEP) y
+los brazos quedan algo por debajo de GEP (87 % frente a 93 %). Otras diferencias que podrían contribuir, sin probarlas: el cruce (en GEP se aplica a cada gen en cada pareja; en
+árboles, a un solo árbol y con puerta de 0,8) y la recombinación de genes, y que los cromosomas de GEP tienen símbolos no expresados que permiten cambios neutros.
+
+**Esto no cambia los resultados finales:** la configuración evaluada en validación sigue siendo `p_mutation` = 0,2.
