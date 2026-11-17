@@ -30,6 +30,23 @@ python scripts/run_experiments.py configs/final_baseline.toml configs/final_A.to
 python scripts/analyze.py results/runs              # hito 10: tablas, tests estadísticos y figuras
 ```
 
+### Análisis posteriores a la validación
+
+Se hicieron después de ver los resultados de validación, sin cambiar el código del sistema ni ningún parámetro
+(K = 3, profundidad 3, ε = 1,26 y 0,0030). Todo se informa salga como salga; ver `docs/DISENO.md` (D23).
+
+```bash
+python scripts/run_d23.py --dry-run                 # D23: nº de ejecuciones y tiempo estimado (solo Diabetes)
+python scripts/run_d23.py                           # 5 particiones nuevas (semillas 2027–2031) × (línea base + C árbol) × 10 semillas
+python scripts/run_d23.py --summarize               # regenera results/d23/resumen.{md,json} con lo que ya hay
+python scripts/diagnose_tail.py results/runs        # diagnóstico de la cola de C con árboles en California
+```
+
+- `results/d23/` (`splits/`, `runs/`, `resumen.md`): robustez a la partición en Diabetes; no toca `data/splits/` ni `results/runs/`.
+- `results/diagnostics/`: diagnóstico de la cola de ejecuciones malas de C con árboles en California.
+- `docs/INTERPRETACION.md`: interpretación manual (distinta de `results/analysis/informe.md`, que es automático).
+
+
 - Cada experimento es un TOML de `configs/`; cada ejecución escribe un JSON en
   `results/runs/<experimento>/<dataset>/seed_<s>.json` y relanzar el script no repite las ya hechas.
 - Si un TOML cambia, `run_experiments.py` se detiene en lugar de mezclar resultados antiguos con nuevos.
