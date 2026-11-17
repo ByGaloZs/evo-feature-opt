@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -84,6 +85,10 @@ def resumen(estadistica: dict) -> str:
         partes.append(f"- **{h}** — {x['text']} → **{estado}**. {x['evidence']}." + (f" ({x['note']})" if "note" in x else ""))
     partes += ["", "**Conclusión de H2 tras D23 (posterior a la validación, manual):** ver la sección 5.3. "
                    "La mejora de Diabetes en la partición 2026 no se reproduce en otras particiones.", "",
+               "**H4 tras los análisis posteriores (5.2 y 5.4):** misma mediana de e′, pero los árboles fallan más "
+               "(11/30 ejecuciones malas en California, fallo de búsqueda); con más mutación la cola casi desaparece "
+               "(descriptivo, no significativo). La diferencia de fiabilidad se atribuye probablemente a la intensidad de "
+               "mutación, no a la representación.", "",
                "Resumen de e frente a e′ (mediana de e′ sobre las 30 semillas):", "",
                "| Dataset | Configuración | e | mediana e′ | % e′ < e | mejora rel. mediana |", "| --- | --- | --- | --- | --- | --- |"]
     for ds, porclave in estadistica["descriptive"].items():
@@ -132,6 +137,16 @@ def seccion(texto: str, titulo: str) -> str:
     return (cuerpo[: cuerpo.index("\n## ")] if "\n## " in cuerpo else cuerpo).strip("\n")
 
 
+def limpiar_interpretacion(texto: str) -> str:
+    """Quita de la interpretación, en RESULTADOS.md, la tabla repetida de «Lo observado» y la frase que remite a la propia 5.4.
+
+    `docs/EXPLORATORIO.md` (documento independiente) conserva ambas; aquí la tabla ya está arriba, en la sección 5.4.
+    """
+    texto = re.sub(r"\*\*Lo observado \(solo train\)\.\*\*\n\n(?:\|.*\n)+\n", "", texto + "\n").rstrip("\n")
+    texto = re.sub(r"\s*Tabla y tests en `results/explore_mutation/resumen\.md` y en la sección 5\.4 de\s+`docs/RESULTADOS\.md`\.", "", texto)
+    return texto
+
+
 def exploratorio() -> str | None:
     """Sección 5.4 (tasa de mutación de los árboles, solo train); None si todavía no se ha ejecutado."""
     if not EXPLORA_RESUMEN.exists():
@@ -142,7 +157,7 @@ def exploratorio() -> str | None:
               "Es exploratorio, posterior a la validación, y **no cambia los resultados finales**.", "",
               "**H6 (exploratoria).** " + seccion(doc, "H6 (exploratoria)"), "",
               bajar_niveles("## Resultados\n\n" + leer(EXPLORA_RESUMEN).strip("\n"), 2), "",
-              bajar_niveles("## Interpretación\n\n" + seccion(doc, "Resultados e interpretación"), 2), ""]
+              bajar_niveles("## Interpretación\n\n" + limpiar_interpretacion(seccion(doc, "Resultados e interpretación")), 2), ""]
     return "\n".join(partes)
 
 

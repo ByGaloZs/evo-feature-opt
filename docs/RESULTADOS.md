@@ -25,6 +25,8 @@ Contraste de las hipótesis de `docs/HIPOTESIS.md` con los experimentos finales 
 
 **Conclusión de H2 tras D23 (posterior a la validación, manual):** ver la sección 5.3. La mejora de Diabetes en la partición 2026 no se reproduce en otras particiones.
 
+**H4 tras los análisis posteriores (5.2 y 5.4):** misma mediana de e′, pero los árboles fallan más (11/30 ejecuciones malas en California, fallo de búsqueda); con más mutación la cola casi desaparece (descriptivo, no significativo). La diferencia de fiabilidad se atribuye probablemente a la intensidad de mutación, no a la representación.
+
 Resumen de e frente a e′ (mediana de e′ sobre las 30 semillas):
 
 | Dataset | Configuración | e | mediana e′ | % e′ < e | mejora rel. mediana |
@@ -689,17 +691,7 @@ Tests **exploratorios, sin corregir por comparaciones múltiples** (bilaterales)
 #### Interpretación
 
 Ejecutado el 2026-11-17: 60 ejecuciones, 0 fallos. Antes de lanzar los brazos, las semillas 0, 1 y 2 reejecutadas con `p_mutation` = 0,2 dieron exactamente el
-mismo MAE en CV que los JSON finales (el control se reutiliza con garantías). Tabla y tests en `results/explore_mutation/resumen.md` y en la sección 5.4 de
-`docs/RESULTADOS.md`.
-
-**Lo observado (solo train).**
-
-| | % CV < 0,5 | RIC del MAE en CV | % transforma AveOccup |
-| --- | --- | --- | --- |
-| `p_mutation` 0,2 (control) | 70 % (21/30) | 0,0285 | 80 % |
-| 0,5 | 87 % (26/30) | 0,0076 | 97 % |
-| 1,0 | 87 % (26/30) | 0,0090 | 97 % |
-| GEP | 93 % (28/30) | 0,0074 | 100 % |
+mismo MAE en CV que los JSON finales (el control se reutiliza con garantías).
 
 El patrón descriptivo es el que predecía H6: la proporción con CV < 0,5 sube y se acerca a GEP, y el RIC cae hasta el nivel de GEP. Lo que desaparece es la cola
 mala (Q3 de 0,5106 a 0,4889 y 0,4910), no el centro (medianas 0,4855, 0,4828, 0,4852; GEP 0,4834).
