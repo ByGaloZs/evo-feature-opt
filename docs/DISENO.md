@@ -275,6 +275,11 @@ Cuatro configuraciones por dataset más la variante GEP de C, 30 semillas cada u
 
 **D23 — Robustez a la partición (opcional).** Repetir C con 5 particiones train/validación distintas, sobre todo en Diabetes. *Por qué:* con ≈ 90 filas de validación, una sola partición puede dar una mejora o un empeoramiento por suerte.
 
+- **Ejecución de D23 (posterior a la validación; decisión de implementación, hito 10+).** Estaba previsto como opcional desde el diseño. Se ejecuta *después* de ver los resultados de validación, motivado por la diferencia entre la CV sobre train y la validación de la partición 2026 (línea base: 39,22 en validación frente a 46,22 en CV, es decir, una validación un 15 % más fácil, con unas 89 filas). Solo en Diabetes: 5 particiones 80/20 nuevas (semillas 2027–2031, guardadas en `results/d23/splits/`, sin tocar `data/splits/`); en cada una, línea base y C con árboles con las semillas 0–9, con los mismos parámetros del experimento final (K = 3, profundidad 3, ε = 1,26, sin piloto nuevo), ajustando todo solo con el train de esa partición. Resultados en `results/d23/`, descriptivos (con 5 particiones no se hacen tests). Script: `scripts/run_d23.py`.
+- **Limitación de D23:** K, profundidad y ε se eligieron con el train de la partición 2026, que se solapa con la validación de las particiones nuevas. En Diabetes el piloto no distinguía entre combinaciones (las 9 quedaban dentro de ε), así que el efecto es despreciable.
+- **Reglas de lo posterior a la validación:** no se cambia el código del sistema ni ningún parámetro; los resultados se informan salgan como salgan; cualquier cambio que se derive es una decisión posterior a la validación que toma el usuario.
+- **Diagnóstico de la cola de C con árboles en California (posterior a la validación).** Solo diagnóstico (`scripts/diagnose_tail.py`, `results/diagnostics/`): no cambia ningún parámetro ni el código.
+
 **D25 — Comparación de representaciones: árboles frente a GEP.** La configuración C se ejecuta dos veces, con árboles y con GEP, cambiando **solo** la representación de las fórmulas.
 
 - *Qué se mantiene igual:* máscara, interruptores, fitness, parsimonia, conjunto de funciones, tamaño máximo de fórmula (15 nodos), presupuesto (100 × 100 evaluaciones), restricción de D24 y semillas.

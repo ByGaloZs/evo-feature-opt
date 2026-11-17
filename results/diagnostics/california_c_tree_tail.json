@@ -1,0 +1,553 @@
+{
+ "cut_e_prime": 0.49060644685951216,
+ "worst_tree": [
+  {
+   "seed": 17,
+   "e_prime": 0.6618339487407363,
+   "cv_mae_best": 0.5164518406565592,
+   "cv_mae_evolution": 0.5163565873049899,
+   "gap_e_prime_minus_cv": 0.14538210808417706,
+   "n_columns": 7,
+   "kept_originals": [
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "AveOccup",
+    "Latitude"
+   ],
+   "formulas": [
+    "(AveOccup * (Longitude * AveOccup))",
+    "(MedInc - Longitude)"
+   ],
+   "complexity": 15,
+   "last_improvement_generation": 100,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5163565873049899,
+   "hof_winner_cv_evolution": 0.5163565873049899,
+   "hof_min_cv_new_folds": 0.5164518406565592,
+   "hof_winner_cv_new_folds": 0.5164518406565592,
+   "hof_size": 10,
+   "transforms_AveOccup": false,
+   "log_AveRooms": false
+  },
+  {
+   "seed": 28,
+   "e_prime": 0.5192414662841222,
+   "cv_mae_best": 0.5310367680499586,
+   "cv_mae_evolution": 0.5311138726411448,
+   "gap_e_prime_minus_cv": -0.01179530176583643,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "log(1 + |log(1 + |AveRooms|)|)"
+   ],
+   "complexity": 10,
+   "last_improvement_generation": 19,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5311138726411448,
+   "hof_winner_cv_evolution": 0.5311138726411448,
+   "hof_min_cv_new_folds": 0.5310367680499586,
+   "hof_winner_cv_new_folds": 0.5310367680499586,
+   "hof_size": 10,
+   "transforms_AveOccup": false,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 3,
+   "e_prime": 0.5165177432819477,
+   "cv_mae_best": 0.5288149836327176,
+   "cv_mae_evolution": 0.5285863855608658,
+   "gap_e_prime_minus_cv": -0.012297240350769956,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "Longitude"
+   ],
+   "formulas": [
+    "sqrt(|(Latitude * sqrt(|AveRooms|))|)",
+    "(Latitude + AveBedrms)"
+   ],
+   "complexity": 15,
+   "last_improvement_generation": 49,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5285863855608658,
+   "hof_winner_cv_evolution": 0.5285863855608658,
+   "hof_min_cv_new_folds": 0.5288149836327176,
+   "hof_winner_cv_new_folds": 0.5288149836327176,
+   "hof_size": 10,
+   "transforms_AveOccup": false,
+   "log_AveRooms": false
+  },
+  {
+   "seed": 27,
+   "e_prime": 0.5132907542941069,
+   "cv_mae_best": 0.5252440454393357,
+   "cv_mae_evolution": 0.5250631148658449,
+   "gap_e_prime_minus_cv": -0.011953291145228806,
+   "n_columns": 7,
+   "kept_originals": [
+    "AveRooms",
+    "AveBedrms",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "((AveRooms - HouseAge) + (AveOccup + AveBedrms))",
+    "(log(1 + |log(1 + |AveRooms|)|) + MedInc)",
+    "(log(1 + |Latitude|) * Latitude)"
+   ],
+   "complexity": 23,
+   "last_improvement_generation": 42,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5250631148658449,
+   "hof_winner_cv_evolution": 0.5250631148658449,
+   "hof_min_cv_new_folds": 0.5252440454393357,
+   "hof_winner_cv_new_folds": 0.5252440454393357,
+   "hof_size": 10,
+   "transforms_AveOccup": false,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 1,
+   "e_prime": 0.51159903136795,
+   "cv_mae_best": 0.5252402426870648,
+   "cv_mae_evolution": 0.5259051378773429,
+   "gap_e_prime_minus_cv": -0.013641211319114777,
+   "n_columns": 7,
+   "kept_originals": [
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "AveOccup"
+   ],
+   "formulas": [
+    "(Longitude - MedInc)",
+    "(sqrt(|sqrt(|Latitude|)|) - Latitude)",
+    "log(1 + |AveRooms|)"
+   ],
+   "complexity": 17,
+   "last_improvement_generation": 51,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5257082099299468,
+   "hof_winner_cv_evolution": 0.5259051378773429,
+   "hof_min_cv_new_folds": 0.5252402426870648,
+   "hof_winner_cv_new_folds": 0.5252402426870648,
+   "hof_size": 10,
+   "transforms_AveOccup": false,
+   "log_AveRooms": true
+  }
+ ],
+ "best_tree": [
+  {
+   "seed": 4,
+   "e_prime": 0.46981965469857623,
+   "cv_mae_best": 0.4760438522920987,
+   "cv_mae_evolution": 0.4758528666730695,
+   "gap_e_prime_minus_cv": -0.006224197593522496,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "log(1 + |AveRooms|)",
+    "log(1 + |(Latitude * (Latitude + Longitude))|)",
+    "(AveOccup / sqrt(|AveOccup|))"
+   ],
+   "complexity": 19,
+   "last_improvement_generation": 70,
+   "generation_below_threshold": 70,
+   "hof_min_cv_evolution": 0.4758528666730695,
+   "hof_winner_cv_evolution": 0.4758528666730695,
+   "hof_min_cv_new_folds": 0.4760438522920987,
+   "hof_winner_cv_new_folds": 0.4760438522920987,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 0,
+   "e_prime": 0.4728239549821789,
+   "cv_mae_best": 0.4780012755018475,
+   "cv_mae_evolution": 0.4778356463659182,
+   "gap_e_prime_minus_cv": -0.005177320519668627,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "AveOccup",
+    "Longitude"
+   ],
+   "formulas": [
+    "(sqrt(|(AveOccup * AveOccup)|) + AveOccup)",
+    "(Latitude - log(1 + |log(1 + |AveRooms|)|))",
+    "(log(1 + |Latitude|) - (sqrt(|Latitude|) - Longitude))"
+   ],
+   "complexity": 25,
+   "last_improvement_generation": 99,
+   "generation_below_threshold": 10,
+   "hof_min_cv_evolution": 0.4778356463659182,
+   "hof_winner_cv_evolution": 0.4778356463659182,
+   "hof_min_cv_new_folds": 0.4780012755018475,
+   "hof_winner_cv_new_folds": 0.4780012755018475,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 16,
+   "e_prime": 0.47340915172669557,
+   "cv_mae_best": 0.48012080094736387,
+   "cv_mae_evolution": 0.4800883939851359,
+   "gap_e_prime_minus_cv": -0.006711649220668303,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "log(1 + |AveBedrms|)",
+    "(AveOccup / (AveOccup + sqrt(|AveOccup|)))",
+    "log(1 + |AveRooms|)"
+   ],
+   "complexity": 17,
+   "last_improvement_generation": 87,
+   "generation_below_threshold": 10,
+   "hof_min_cv_evolution": 0.4800883939851359,
+   "hof_winner_cv_evolution": 0.4800883939851359,
+   "hof_min_cv_new_folds": 0.48012080094736387,
+   "hof_winner_cv_new_folds": 0.48012080094736387,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 11,
+   "e_prime": 0.47343743615689504,
+   "cv_mae_best": 0.4795021101000498,
+   "cv_mae_evolution": 0.4793758704315141,
+   "gap_e_prime_minus_cv": -0.006064673943154741,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "sqrt(|AveOccup|)",
+    "(log(1 + |log(1 + |AveRooms|)|) - (AveOccup / AveOccup))",
+    "sqrt(|(sqrt(|AveOccup|) + (AveOccup + AveOccup))|)"
+   ],
+   "complexity": 23,
+   "last_improvement_generation": 77,
+   "generation_below_threshold": 20,
+   "hof_min_cv_evolution": 0.4793758704315141,
+   "hof_winner_cv_evolution": 0.4793758704315141,
+   "hof_min_cv_new_folds": 0.4795021101000498,
+   "hof_winner_cv_new_folds": 0.4795021101000498,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": true
+  },
+  {
+   "seed": 14,
+   "e_prime": 0.47377547376745327,
+   "cv_mae_best": 0.4794014039386001,
+   "cv_mae_evolution": 0.4791698363401241,
+   "gap_e_prime_minus_cv": -0.00562593017114682,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "AveOccup",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "((Population + HouseAge) + (HouseAge + HouseAge))",
+    "(sqrt(|AveOccup|) * sqrt(|AveOccup|))",
+    "(sqrt(|log(1 + |Latitude|)|) + (sqrt(|AveRooms|) - Latitude))"
+   ],
+   "complexity": 27,
+   "last_improvement_generation": 84,
+   "generation_below_threshold": 39,
+   "hof_min_cv_evolution": 0.4791698363401241,
+   "hof_winner_cv_evolution": 0.4791698363401241,
+   "hof_min_cv_new_folds": 0.4794014039386001,
+   "hof_winner_cv_new_folds": 0.4794014039386001,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": false
+  }
+ ],
+ "worst_gep": [
+  {
+   "seed": 27,
+   "e_prime": 0.5417415299620507,
+   "cv_mae_best": 0.5188857419064842,
+   "cv_mae_evolution": 0.5096482358228573,
+   "gap_e_prime_minus_cv": 0.02285578805556654,
+   "n_columns": 7,
+   "kept_originals": [
+    "MedInc",
+    "HouseAge",
+    "AveOccup",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "((((Population + AveOccup) + Population) * AveOccup) - Latitude)",
+    "(sqrt(|AveRooms|) + sqrt(|AveOccup|))"
+   ],
+   "complexity": 21,
+   "last_improvement_generation": 91,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5096482358228573,
+   "hof_winner_cv_evolution": 0.5096482358228573,
+   "hof_min_cv_new_folds": 0.5188857419064842,
+   "hof_winner_cv_new_folds": 0.5188857419064842,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": false
+  },
+  {
+   "seed": 26,
+   "e_prime": 0.49663680383577863,
+   "cv_mae_best": 0.5046934787564635,
+   "cv_mae_evolution": 0.5042539169298921,
+   "gap_e_prime_minus_cv": -0.008056674920684903,
+   "n_columns": 6,
+   "kept_originals": [
+    "MedInc",
+    "AveOccup",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "(sqrt(|(AveOccup * (AveOccup - Latitude))|) + Latitude)",
+    "(HouseAge + AveBedrms)"
+   ],
+   "complexity": 17,
+   "last_improvement_generation": 98,
+   "generation_below_threshold": null,
+   "hof_min_cv_evolution": 0.5042291940225827,
+   "hof_winner_cv_evolution": 0.5042539169298921,
+   "hof_min_cv_new_folds": 0.5046934787564635,
+   "hof_winner_cv_new_folds": 0.5046934787564635,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": false
+  },
+  {
+   "seed": 16,
+   "e_prime": 0.4885147861984886,
+   "cv_mae_best": 0.4978901053192695,
+   "cv_mae_evolution": 0.49763567330989733,
+   "gap_e_prime_minus_cv": -0.009375319120780934,
+   "n_columns": 7,
+   "kept_originals": [
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "Latitude",
+    "Longitude"
+   ],
+   "formulas": [
+    "((AveOccup * (MedInc / MedInc)) / log(1 + |log(1 + |AveOccup|)|))",
+    "(log(1 + |(AveOccup + AveRooms)|) + MedInc)"
+   ],
+   "complexity": 22,
+   "last_improvement_generation": 92,
+   "generation_below_threshold": 68,
+   "hof_min_cv_evolution": 0.49763567330989733,
+   "hof_winner_cv_evolution": 0.49763567330989733,
+   "hof_min_cv_new_folds": 0.4978901053192695,
+   "hof_winner_cv_new_folds": 0.4978901053192695,
+   "hof_size": 10,
+   "transforms_AveOccup": true,
+   "log_AveRooms": false
+  }
+ ],
+ "groups": {
+  "bad": {
+   "n": 11,
+   "e_prime_median": 0.5061473600882492,
+   "cv_mae_best_median": 0.5164518406565592,
+   "gap_median": -0.010062049520235705,
+   "complexity_median": 17.0,
+   "n_columns_median": 7.0,
+   "last_improvement_median": 74.0,
+   "still_improving_at_end_fraction": 0.18181818181818182,
+   "transforms_AveOccup_fraction": 0.45454545454545453,
+   "log_AveRooms_fraction": 0.2727272727272727,
+   "MedInc_kept_fraction": 0.7272727272727273
+  },
+  "good": {
+   "n": 19,
+   "e_prime_median": 0.475710104457056,
+   "cv_mae_best_median": 0.4838088668280474,
+   "gap_median": -0.006064673943154741,
+   "complexity_median": 19.0,
+   "n_columns_median": 7.0,
+   "last_improvement_median": 86.0,
+   "still_improving_at_end_fraction": 0.2631578947368421,
+   "transforms_AveOccup_fraction": 1.0,
+   "log_AveRooms_fraction": 0.631578947368421,
+   "MedInc_kept_fraction": 1.0
+  }
+ },
+ "spearman_e_prime_vs_cv": {
+  "tree": {
+   "statistic": 0.971523915461624,
+   "pvalue": 4.743797189843292e-19,
+   "correlation": 0.971523915461624
+  },
+  "gep": {
+   "statistic": 0.9389253590195076,
+   "pvalue": 1.6898048404280205e-14,
+   "correlation": 0.9389253590195076
+  }
+ },
+ "hof_alternatives_bad_runs": [
+  {
+   "seed": 1,
+   "winner_cv_evolution": 0.5259051378773429,
+   "hof_min_cv_evolution": 0.5257082099299468,
+   "winner_cv_new_folds": 0.5252402426870648,
+   "hof_min_cv_new_folds": 0.5252402426870648
+  },
+  {
+   "seed": 3,
+   "winner_cv_evolution": 0.5285863855608658,
+   "hof_min_cv_evolution": 0.5285863855608658,
+   "winner_cv_new_folds": 0.5288149836327176,
+   "hof_min_cv_new_folds": 0.5288149836327176
+  },
+  {
+   "seed": 7,
+   "winner_cv_evolution": 0.514938138260954,
+   "hof_min_cv_evolution": 0.514938138260954,
+   "winner_cv_new_folds": 0.5154100809813171,
+   "hof_min_cv_new_folds": 0.5154100809813171
+  },
+  {
+   "seed": 9,
+   "winner_cv_evolution": 0.4966604444867137,
+   "hof_min_cv_evolution": 0.4966604444867137,
+   "winner_cv_new_folds": 0.4967369385637362,
+   "hof_min_cv_new_folds": 0.4967369385637362
+  },
+  {
+   "seed": 12,
+   "winner_cv_evolution": 0.517661904399856,
+   "hof_min_cv_evolution": 0.5176598843591433,
+   "winner_cv_new_folds": 0.5174351449822346,
+   "hof_min_cv_new_folds": 0.5174351449822346
+  },
+  {
+   "seed": 17,
+   "winner_cv_evolution": 0.5163565873049899,
+   "hof_min_cv_evolution": 0.5163565873049899,
+   "winner_cv_new_folds": 0.5164518406565592,
+   "hof_min_cv_new_folds": 0.5164518406565592
+  },
+  {
+   "seed": 19,
+   "winner_cv_evolution": 0.5126898735202519,
+   "hof_min_cv_evolution": 0.5126898735202519,
+   "winner_cv_new_folds": 0.5124432208583177,
+   "hof_min_cv_new_folds": 0.5124432208583177
+  },
+  {
+   "seed": 21,
+   "winner_cv_evolution": 0.5051302765197556,
+   "hof_min_cv_evolution": 0.5051302765197556,
+   "winner_cv_new_folds": 0.5051115908793827,
+   "hof_min_cv_new_folds": 0.5051115908793827
+  },
+  {
+   "seed": 25,
+   "winner_cv_evolution": 0.49436864840777134,
+   "hof_min_cv_evolution": 0.49436864840777134,
+   "winner_cv_new_folds": 0.4951541716404246,
+   "hof_min_cv_new_folds": 0.4951541716404246
+  },
+  {
+   "seed": 27,
+   "winner_cv_evolution": 0.5250631148658449,
+   "hof_min_cv_evolution": 0.5250631148658449,
+   "winner_cv_new_folds": 0.5252440454393357,
+   "hof_min_cv_new_folds": 0.5252440454393357
+  },
+  {
+   "seed": 28,
+   "winner_cv_evolution": 0.5311138726411448,
+   "hof_min_cv_evolution": 0.5311138726411448,
+   "winner_cv_new_folds": 0.5310367680499586,
+   "hof_min_cv_new_folds": 0.5310367680499586
+  }
+ ],
+ "convergence": {
+  "tree": {
+   "threshold": 0.5,
+   "runs_reaching": 21,
+   "runs": 30,
+   "median_generation_when_reached": 39.0,
+   "e_prime_iqr": 0.027663563337142816
+  },
+  "gep": {
+   "threshold": 0.5,
+   "runs_reaching": 28,
+   "runs": 30,
+   "median_generation_when_reached": 29.0,
+   "e_prime_iqr": 0.007435901891473806
+  }
+ },
+ "ratio_bad_to_total": 0.36666666666666664,
+ "large_gap_runs": {
+  "threshold": 0.02,
+  "tree": [
+   {
+    "seed": 17,
+    "e_prime": 0.6618339487407363,
+    "cv": 0.5164518406565592,
+    "gap": 0.14538210808417706,
+    "formulas": [
+     "(AveOccup * (Longitude * AveOccup))",
+     "(MedInc - Longitude)"
+    ]
+   }
+  ],
+  "gep": [
+   {
+    "seed": 27,
+    "e_prime": 0.5417415299620507,
+    "cv": 0.5188857419064842,
+    "gap": 0.02285578805556654,
+    "formulas": [
+     "((((Population + AveOccup) + Population) * AveOccup) - Latitude)",
+     "(sqrt(|AveRooms|) + sqrt(|AveOccup|))"
+    ]
+   }
+  ]
+ },
+ "mutation_events": {
+  "tree_per_individual": 0.2,
+  "gep_per_individual": 2.5799999999999996,
+  "gep_gene_length": 15
+ }
+}
